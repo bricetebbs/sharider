@@ -1,0 +1,312 @@
+{% extends 'srmain/template_base.html' %}
+{% block title %}System Map {% endblock %}
+
+{% block javascript %}
+
+{% include 'srmain/jquery.inc.html' %}
+
+<script type="text/javascript" src="/site_media/js/raphael-min.js"></script>
+<script type="text/javascript" src="/site_media/js/map_funcs.js"></script>
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"> </script>
+
+<script type="text/javascript">
+
+ 
+var pointsData;
+var posMarker;
+var map;
+var allMarkers = new Array;
+var markerInfoTable;
+var directionsService = new google.maps.DirectionsService();
+
+var latestDirections;
+var chart;
+var chartMark;
+var rideInfo = null;
+
+var distanceMax = 1.0;
+var distanceMin = 0;
+var chartX = 500;
+var chartY = 100;
+
+
+var currentRouteGuid = null;
+
+// Setup information from template
+
+{% if user.pk %}
+    var userPk = {{user.pk}};
+{% else %}
+    var userPk = 0;
+{% endif %}
+
+
+function makeMarkerVisibilityCallback(kind)
+{
+    return function(state) {
+        for (i = 0; i < allMarkers.length; i++)
+        {
+            m = allMarkers[i];
+            if (m.my_kind == kind)
+            {
+                m.setVisible($(this).is(':checked'));
+            }
+        }
+    };
+}
+
+
+function drawChartDisplay(chart, rideInfo)
+{
+    drawChartBox(chartX, chartY);
+
+    drawChart(chart, 0, 0, chartX, chartY, distanceMin, distanceMax, 0, rideInfo.max_speed, pointsData, 2, 4, 'blue');
+    drawChart(chart, 0, 0, chartX, chartY, distanceMin, distanceMax, rideInfo.min_altitude, rideInfo.max_altitude, pointsData, 2, 3, 'black');
+}
+
+
+
+var wayPoints = new Array;
+
+var directionsDisplay;
+
+function updateRoute(event)
+{
+    console.log("updateRoute");
+    if(wayPoints.length < 1)
+    {
+        directionsDisplay.setMap(null);
+        return;
+    }
+   
+    var request = {
+      origin:wayPoints[0].location,
+      destination: wayPoints[wayPoints.length-1].location,
+      waypoints: wayPoints.slice(1, wayPoints.length-1),
+      travelMode: google.maps.DirectionsTravelMode.BICYCLING,
+    };
+    directionsService.route(request, function(response, status) {
+
+     if (status == google.maps.DirectionsStatus.OK) {
+       
+     
+        latestDirections = response;
+        
+        directionsDisplay.setDirections(response);
+        directionsDisplay.setMap(map);
+      }
+    });
+}
+
+
+function addPoint(event)
+{
+    wayPoints.push({ location: event.latLng });
+    updateRoute();
+}
+
+function clearRoute()
+{
+    wayPoints = new Array;
+    currentRouteGuid = '';
+    
+    document.getElementById('route_name').value ='';
+                
+    $('#directions_panel').empty();
+    updateRoute();
+}
+
+
+function saveCurrentRoute()
+{
+    saveRoute(currentRouteGuid,  latestDirections, setupRouteList);
+}
+
+function onClick(event)
+{
+    addPoint(event);
+}
+
+function updateDirections(directions)
+{
+    console.log("Directions Updated");
+    latestDirections = directions;
+
+}   
+
+function adjustToWindowSize()
+{
+        console.log("Resize");
+        
+
+      
+        chartX = $('#chart_canvas').width();
+        chartY = $('#chart_canvas').height();
+       
+        resizeChart(chart, chartX, chartY);
+        
+        if(rideInfo != null)
+        {
+              drawChartDisplay(chart, rideInfo);
+        }
+        
+        
+     $('#map_canvas').height($('#map_canvas').width());
+}
+
+function setupDirectionDisplay(panelId, updateFunction)
+{
+    var rendererOptions = {
+        draggable: true,
+        preserveViewport: true,
+        suppressBicyclingLayer : true
+    };
+
+    directionsDisplay = new google.maps.DirectionsRenderer(rendererOptions);
+    
+    
+    google.maps.event.addListener(directionsDisplay, 'directions_changed',  updateFunction)
+
+    
+    directionsDisplay.setMap(map);
+    directionsDisplay.setPanel(document.getElementById(panelId));
+}
+
+function setupRouteList()
+{
+    console.log("Setup route list");
+    $.ajax({ url: '{% url json_route_list %}', dataType: 'json', context: document.body,
+        success: function(data)
+        {
+            $('#anno_tab_routes').empty(lbl);
+            
+            $('#anno_tab_routes').append('<a onclick="clearRoute();"> Clear Route </a><br/>');
+            for(var i = 0; i < data.route_list.length; i++)
+            {
+                var r = data.route_list[i];
+                var lbl = '<a onclick="loadRoute(\'' + r.guid + '\');">' + r.creator + ': ' + r.name + '</a><br/>';
+                console.log(lbl);
+                $('#anno_tab_routes').append(lbl);
+             }
+            $("a", "#anno_tab_routes").button();
+          
+        }
+    });
+}
+
+
+
+function setupRideList()
+{
+    console.log("Setup Ride list");
+    $.ajax({ url: '{% url json_ride_list %}', dataType: 'json', context: document.body,
+        success: function(data)
+        {
+            $('#anno_tab_rides').empty(lbl);
+            $('#anno_tab_rides').append('<a onclick="clearRide();"> Clear Ride </a><br/>');
+            for(var i = 0; i < data.ride_list.length; i++)
+            {
+                var r = data.ride_list[i];
+                var lbl = '<a onclick="loadRide(\'' + r.guid + '\');">' + r.rider + ': ' + r.name + '</a><br/>';
+                $('#anno_tab_rides').append(lbl);
+             }
+            $("a", "#anno_tab_rides").button();
+        
+        }
+    });
+}
+
+
+function initialize()
+{
+    console.log("Initialize");
+// Setup map and chart
+
+    var latlng = new google.maps.LatLng(47.65914420855326, -117.40264892578125);
+
+    var myOptions = {
+        zoom: 12,
+        center: latlng,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+
+    map = new google.maps.Map(document.getElementById('map_canvas'), myOptions);
+    
+    var bikeLayer = new google.maps.BicyclingLayer();
+    bikeLayer.setMap(map);
+    
+    
+    setupDirectionDisplay("directions_panel", function() { updateDirections(directionsDisplay.directions);} )
+
+    google.maps.event.addListener(map, 'click', onClick);
+
+   
+    
+    $.ajax({ url: '{% url all_markers %}', dataType: 'json', context: document.body,
+        success: function(data)
+        {
+            loadMarkers(map, data);
+            setupMarkerOptions(data,'#anno_tab_options', makeMarkerVisibilityCallback);
+              $("#map_options").buttonset();
+        }
+    });
+    
+    chart = createChart('chart_canvas',chartX, chartY);
+
+    adjustToWindowSize();
+    drawChartBox();
+    
+    setupRouteList();
+    setupRideList();
+    
+    if (currentRouteGuid)
+    {
+        loadRoute(currentRouteGuid);
+    }
+    else if(userPk)
+    {
+        $('.edit_buttons').show();
+        $("a", ".edit_buttons").button();
+    }
+    
+    $('#chart_canvas').hide();
+    $('#anno_tab_holder').tabs();
+
+    // If the screen resizes we may need to deal with it
+    $(window).resize(function() {         
+            adjustToWindowSize();
+        });
+}
+
+</script>
+{% endblock %}
+
+
+{% block bodytag %} <body onload="initialize();"> {% endblock %}
+{% block content %}
+    
+    <div id='anno_tab_holder' >
+        <ul>
+            <li><a href="#anno_tab_rides">Rides</a></li>
+            <li><a href="#anno_tab_routes">Routes</a></li>
+             <li><a href="#anno_tab_options">Options</a></li>  
+             <li><a href="#anno_tab_edit">Edit</a></li>  
+        </ul>
+        <div id="anno_tab_rides" ></div>
+        <div id="anno_tab_routes" ></div>
+        <div id="anno_tab_options" class='map_options'></div>
+        <div id="anno_tab_edit"> 
+                <div class="edit_buttons" style='display: none'>
+                    <a onclick='clearRoute();'>Clear Route </a>
+                    <a onclick='saveCurrentRoute();'> Save Route</a> Name: <input id="route_name"type="text" name="lname" />
+                </div>
+        </div>
+    </div>
+    
+    <div id="map_canvas" style="width:100%;height:100%;"></div>
+    <div >
+    <div id="chart_canvas" ontouchstart="touchUpdate(event);"  ontouchmove="touchUpdate(event);" style="width:100%; height:100px;"></div>
+    </div>
+    <div id="directions_panel" style="float:right;width:100%;height 100%">  </div>
+
+{% endblock %}

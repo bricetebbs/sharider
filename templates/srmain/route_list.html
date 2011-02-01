@@ -1,0 +1,23 @@
+{% extends 'srmain/template_base.html' %}
+{% block title %} Route List {% endblock %}
+{% block javascript %}
+
+{% include 'srmain/jquery.inc.html' %}
+{% endblock %}
+
+{% block content %}
+<a href="{% url system_map %}">System Map</a>
+<h2>Routes</h2>
+{% if request.user.is_authenticated %}
+    <a href="{% url route_map %}">Add New Route</a><br>
+{% endif %}
+<table>
+{% for route in object_list %}
+    <tr>
+    <a href="{% url route_map route.pk %}">{{route.name}}:  {{ route.creator}} : {{ route.created_time}}</a><br>
+    </tr>
+{% endfor %}
+</table>
+
+
+{% endblock %}

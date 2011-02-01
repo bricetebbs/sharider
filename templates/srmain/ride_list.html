@@ -1,0 +1,11 @@
+{% extends 'srmain/template_base.html' %}
+{% block title %} Ride List {% endblock %}
+{% block content %}
+<a href="{% url system_map %}">System Map</a>
+
+<h2>RIDES</h2>
+{% for ride in object_list %}
+<a href="{% url ride_map ride.pk %}">{{ride.rider}}: {{ride.name}} : {{ ride.start_time}}</a><br>
+{% endfor %}
+
+{% endblock %}

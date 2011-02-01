@@ -1,0 +1,177 @@
+{% extends 'srmain/template_base.html' %}
+{% block title %} {{ride.rider}}:{{ride.name}} {% endblock %}
+
+{% block javascript %}
+
+{% include 'srmain/jquery.inc.html' %}
+
+<script type="text/javascript" src="/site_media/js/raphael-min.js"></script>
+<script type="text/javascript" src="/site_media/js/map_funcs.js"></script>
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"> </script>
+<script type="text/javascript">
+
+var pointsData;
+var posMarker;
+
+var distanceMax = {{ ride.distance }};
+var distanceMin = 0;
+
+
+var infowindow;
+var map;
+var mapBounds;
+var chart;
+var chartMark;
+
+var chartX = 500;
+var chartY = 100;
+
+var allMarkers = new Array;
+var markerInfoTable;
+
+
+function makeMarkerVisibilityCallback(kind)
+{
+    return function(state) {
+        for (i = 0; i < allMarkers.length; i++)
+        {
+            m = allMarkers[i];
+            if (m.my_kind == kind)
+            {
+                m.setVisible($(this).is(':checked'));
+            }
+        }
+    };
+}
+
+
+function drawChartDisplay(chart)
+{
+    drawChartBox(chartX, chartY);
+
+    drawChart(chart, 0, 0, chartX, chartY, distanceMin, distanceMax,
+        0, {{ride.max_speed}}, pointsData, 2, 4, 'blue');
+    drawChart(chart, 0, 0, chartX, chartY, distanceMin, distanceMax,
+        {{ride.min_altitude}}, {{ride.max_altitude}},
+        pointsData, 2, 3, 'black');
+}
+
+function loadRide(rideInfo)
+{
+    pointsData = rideInfo;
+    var data = rideInfo;
+    var coords = new Array;
+    for (i in data)
+    {
+        d = data[i];
+        coords.push(new google.maps.LatLng(d[0], d[1]));
+    }
+    segPath = new google.maps.Polyline({ path: coords,
+        strokeColor: '#FF0000',
+        strokeOpacity: 1.0,
+        strokeWeight: 2
+    });
+    
+    segPath.setMap(map);
+    drawChartDisplay(chart);
+    
+    
+
+    var latlng = new google.maps.LatLng(pointsData[0][0], pointsData[0][1]);
+    posMarker = new google.maps.Marker({position: latlng,
+                                        map: map,
+                                        icon: '/site_media/img/marker_ride_pos.png'});
+
+    $('#chart_canvas').mousemove(mouseMoved);
+    highlight(0);
+    
+}
+
+
+function initialize()
+    {
+    // Setup map and chart
+        var latlng = new google.maps.LatLng({{ride.center_latitude}}, {{ride.center_longitude}});
+
+    var myOptions = {
+        zoom: 13,
+        center: latlng,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+
+    map = new google.maps.Map(document.getElementById('map_canvas'), myOptions);
+
+    var sw = new google.maps.LatLng({{ride.min_latitude}}, {{ride.min_longitude}});
+    var ne = new google.maps.LatLng({{ride.max_latitude}}, {{ride.max_longitude}});
+
+    mapBounds = new google.maps.LatLngBounds(sw, ne);
+
+    map.fitBounds(mapBounds);
+    var bikeLayer = new google.maps.BicyclingLayer();
+    bikeLayer.setMap(map);
+
+    chartX = $('#chart_canvas').width();
+    chartY = $('#chart_canvas').height();
+    $('#map_canvas').height(chartX);
+
+    
+    chart = createChart('chart_canvas',chartX, chartY);
+
+    drawChartBox();
+
+       $.ajax({ url: '{%url json_samples ride.guid "LAT,LON,DST,ALT,SPD" %}', dataType: 'json', context: document.body,
+        success: function(data)
+        {
+            loadRide(data);
+        }
+    });
+
+
+    $.ajax({ url: '{% url fixed_markers %}', dataType: 'json', context: document.body,
+        success: function(data)
+        {
+            loadMarkers(map, data);
+            setupMarkerOptions(data,'#map_options', makeMarkerVisibilityCallback);
+        }
+    });
+
+    // If the screen resizes we may need to deal with it
+    $(window).resize(function() {
+        chartX = $('#chart_canvas').width();
+        chartY = $('#chart_canvas').height();
+       
+        resizeChart(chart, chartX, chartY);
+        $('#map_canvas').height(chartX);
+        drawChartDisplay(chart);
+        map.fitBounds(mapBounds);
+    });
+}
+
+</script>
+{% endblock %}
+
+{% block bodytag %}<body onload="initialize();"> {% endblock %}
+{% block content %}
+<h2>{{ride.name}}</h2>
+<a href="{% url ride_list %}">Rides</a>
+<div id='ride_info'>
+<strong>Start:</strong>{{ride.start_time}}<br/>
+<strong>Dist:</strong>{{ride.html_distance}}<br/>
+<strong>Time:</strong>{{ride.html_duration}}<br/>
+</div>
+
+<table>
+    <tr>
+        <th>Distance</th><th>Speed</th><th>Altitude</th>
+    </tr>
+    <tr>
+        <td> <span id="cur_distance"/>-</span><td> <span id="cur_speed"/>-</span><td> <span id="cur_altitude"/>-</span>
+    </tr>
+</table>
+
+<div id="chart_canvas" style="width:100%; height:100px;"></div>
+<div id="map_canvas" style="width:100%;height:100%;"></div>
+<div id="map_options">
+</div>
+
+{% endblock %}

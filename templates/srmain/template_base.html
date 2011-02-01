@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+<meta charset="utf-8"/>
+<!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+
+<title>{% block title %}BASE TITLE{% endblock %}</title>
+
+<link rel="stylesheet" media="all" href="/site_media/css/less.css"/>
+<meta name="viewport" content="initial-scale=1.0, width=device-width, maximum-scale=1.0"/>
+
+<style type="text/css">
+    html { height: 100% }
+    body { height: 100%; margin: 0px; padding: 0px }
+    #map_canvas { height: 100% }
+</style>
+
+
+<script>
+if (!('console' in window) || !('firebug' in console)) {
+    var names = ['log', 'debug', 'info', 'warn', 'error', 'assert',
+    'dir', 'dirxml', 'group', 'groupEnd',
+    'time', 'timeEnd', 'table', 'count',
+    'trace', 'profile', 'profileEnd'];
+    window.console = {};
+    for (var i = 0; i < names.length; ++i)
+    {
+        window.console[names[i]] = function() {};
+    }
+}
+</script>
+
+{% block javascript %} {% endblock %}
+</head>
+{% block bodytag %} <body> {% endblock %}
+{% block content %}
+{% endblock %}
+{% block trailer %}
+    {% if user.is_authenticated %}
+        Username: {{ user.username }}
+    {% else %}
+        Logged in as Guest
+    {% endif %}
+{% endblock %}
+</body>
+</html>

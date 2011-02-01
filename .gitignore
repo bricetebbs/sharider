@@ -1,0 +1,5 @@
+segments/
+test_segments/
+build/
+*.pyc
+*.svn/

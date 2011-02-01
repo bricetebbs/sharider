@@ -1,0 +1,27 @@
+Add Marker Add UI
+Consolidate Ride_map.html route_map.html and system_map.html
+ADD
+look into adding signup
+
+If a new recording is made all old ones are now in archive mode. Display only shows map and upload options 
+
+HTTPS auth
+maybe focus more on web less on app
+Store GUID with Recording on iphone when its generated.
+5min rt updates so no one needs to call and say when will you get here.
+Make login test actuall test login
+
+Cleeanup memorry usage
+Make requester smarter. Knows about auth and you just queue things up with a call back for it to ask you for more. 1 requester. retrys if auth fails. Also encapuslate server:port info in class
+
+##
+speed preferences
+Add riders to system map page
+Add BIKE PATHS?
+
+Read more about javascript closures
+Rename Functions to camelCase  http://google-styleguide.googlecode.com/svn/trunk/javascriptguide.xml
+Link to site in app
+Recover intra segment info and connect segments on website
+
+Save of GUID must stat in recording detail view controller
