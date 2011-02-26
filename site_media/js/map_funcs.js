@@ -154,9 +154,11 @@ function chartPick(ex, ey, id)
     highlight(found);
     
 }
+
 function mouseMoved(event) 
 {
     chartPick(event.pageX, event.pageY,'chart_canvas');
+    console.log("Moved");
 }
 
 function touchUpdate(event)
@@ -319,10 +321,8 @@ function loadRide(rideGuid)
                 var mapBounds = new google.maps.LatLngBounds(sw, ne);
         
                 map.fitBounds(mapBounds);
-                
-             
-
-                 $('#chart_canvas').mousemoved(mouseMoved);
+               
+                 $('#chart_canvas').mousemove(mouseMoved);
                 highlight(0);
             }
         });

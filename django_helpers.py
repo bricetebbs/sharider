@@ -1,6 +1,5 @@
 from django.template import RequestContext, loader
-from django.http import HttpResponse, Http404
-from django.shortcuts import get_object_or_404
+from django.http import HttpResponse
 
 
 def render_my_response(request, *args, **kwargs):

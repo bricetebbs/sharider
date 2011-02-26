@@ -19,7 +19,6 @@ urlpatterns = patterns('',
     (r'^accounts/logout/$','django.contrib.auth.views.logout'),
     (r'^$', 'sharider.srmain.views.system_map'),
     
-    
     (r'^site_media/(?P<path>.*)$', 'django.views.static.serve',
         {'document_root': settings.STATIC_DOCUMENT_ROOT}),
 )

@@ -1,9 +1,14 @@
 # Django settings for sharider project.
-
+import os
 DEBUG = True
 TEMPLATE_DEBUG = True
 
-from settings_local import *
+INSTALL_DIR = os.path.dirname(__file__) + "/"
+
+SEGMENT_DIR = INSTALL_DIR + 'segments/'
+STATIC_DOCUMENT_ROOT = INSTALL_DIR + 'site_media/'
+
+
 
 
 MARKER_TYPE_ERROR = 0
@@ -180,3 +185,6 @@ LOGGING = {
         }
     }
 }
+
+
+from settings_local import *

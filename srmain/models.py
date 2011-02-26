@@ -85,7 +85,7 @@ class Ride(models.Model):
     
     def html_duration(self):
         td = self.end_time-self.start_time
-        return td;
+        return td
     
     def __unicode__(self):
         return self.guid + u':'  + unicode(self.start_time) + u":" + unicode(self.distance)
@@ -178,7 +178,7 @@ class Route(models.Model):
     guid = models.CharField(max_length=40, primary_key=True, blank = True)
     name = models.CharField(max_length = 200)
     kind = models.PositiveIntegerField(default = 0)
-    creator = models.ForeignKey(User);
+    creator = models.ForeignKey(User)
     created_time = models.DateTimeField(null=True, blank=True)
     modified_time = models.DateTimeField(null=True, blank=True)
     distance = models.FloatField(default = 0.0)
@@ -208,7 +208,7 @@ class Route(models.Model):
         
 class WayPoint(models.Model):
     route = models.ForeignKey(Route)
-    order = models.PositiveIntegerField();
+    order = models.PositiveIntegerField()
     latitude = models.FloatField(default = 0.0)
     longitude = models.FloatField(default = 0.0)
     

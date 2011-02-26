@@ -296,7 +296,7 @@ function initialize()
         <div id="anno_tab_routes" ></div>
         <div id="anno_tab_options" class='map_options'></div>
         <div id="anno_tab_edit"> 
-                <div class="edit_buttons" style='display: none'>
+                        <div class="edit_buttons" style='display: none'>
                     <a onclick='clearRoute();'>Clear Route </a>
                     <a onclick='saveCurrentRoute();'> Save Route</a> Name: <input id="route_name"type="text" name="lname" />
                 </div>
@@ -305,7 +305,7 @@ function initialize()
     
     <div id="map_canvas" style="width:100%;height:100%;"></div>
     <div >
-    <div id="chart_canvas" ontouchstart="touchUpdate(event);"  ontouchmove="touchUpdate(event);" style="width:100%; height:100px;"></div>
+    <div id="chart_canvas" mousemoved="mouseMoved(event);"  style="width:100%; height:100px;"></div>
     </div>
     <div id="directions_panel" style="float:right;width:100%;height 100%">  </div>
 

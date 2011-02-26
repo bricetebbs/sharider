@@ -1,3 +1,6 @@
+.DS_Store
+.idea/
+settings_local.py
 segments/
 test_segments/
 build/

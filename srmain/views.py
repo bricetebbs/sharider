@@ -28,9 +28,9 @@ def rider_detail(request, rider_id):
     return HttpResponse("This will be the page for rider # %s" % rider_id, mimetype='text/plain')
 
 def ride_list(request):
-#    ride_list = Ride.objects.filter(rider=request.user)
-    ride_list = Ride.objects.all()
-    return object_list(request, queryset=ride_list)
+#    queryset = Ride.objects.filter(rider=request.user)
+    queryset = Ride.objects.all()
+    return object_list(request, queryset=queryset)
 
 
 def ride_map(request, ride_guid):
@@ -42,7 +42,7 @@ def system_map(request):
 
 
 def route_map(request, route_guid = None):
-    if(route_guid):
+    if route_guid:
         route = get_object_or_404(Route, guid=route_guid)
     else:
         route = dict(guid=None)
@@ -57,7 +57,7 @@ def jsonhandler(obj):
     if isinstance(obj, datetime):
         return obj.isoformat()
     else:
-        raise TypeError, 'Object of type %s with value of %s is not JSON serializable' % (type(Obj), repr(Obj))
+        raise TypeError, 'Object of type %s with value of %s is not JSON serializable' % (type(obj), repr(obj))
 
 def update_segment_data(segment, headers, samples, first_row):
     seg_path = segment.get_path()
@@ -115,9 +115,7 @@ def new_data(request, ride_guid, ride_name, seg_guid, headers, samples):
     end_time = datetime.fromtimestamp(samples[-1][ti])
 
 
-    sample_count = len(samples)
     distance = samples[-1][di] - samples[0][di]
-
 
     if ride_created or (ride.start_time > start_time):
         ride.start_time = start_time
@@ -245,12 +243,12 @@ def json_route(request, route_guid):
     return HttpResponse(simplejson.dumps(rval), mimetype='application/json')
 
 def route_list(request):
-    route_list = Route.objects.all()
-    return object_list(request, queryset=route_list)
+    list_of_routes = Route.objects.all()
+    return object_list(request, queryset=list_of_routes)
 
 def json_route_list(request):
-    route_list = [ dict(name = route.name, guid = route.guid, creator=route.creator.username) for route in Route.objects.all()]
-    return HttpResponse(simplejson.dumps(dict(route_list=route_list)), mimetype='application/json')
+    list_of_routes = [ dict(name = route.name, guid = route.guid, creator=route.creator.username) for route in Route.objects.all()]
+    return HttpResponse(simplejson.dumps(dict(route_list=list_of_routes)), mimetype='application/json')
 
 
 def fixed_markers(request):

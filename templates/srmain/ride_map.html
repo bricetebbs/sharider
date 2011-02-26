@@ -61,11 +61,13 @@ function loadRide(rideInfo)
     pointsData = rideInfo;
     var data = rideInfo;
     var coords = new Array;
+
     for (i in data)
     {
         d = data[i];
         coords.push(new google.maps.LatLng(d[0], d[1]));
     }
+    
     segPath = new google.maps.Polyline({ path: coords,
         strokeColor: '#FF0000',
         strokeOpacity: 1.0,
@@ -74,8 +76,6 @@ function loadRide(rideInfo)
     
     segPath.setMap(map);
     drawChartDisplay(chart);
-    
-    
 
     var latlng = new google.maps.LatLng(pointsData[0][0], pointsData[0][1]);
     posMarker = new google.maps.Marker({position: latlng,
@@ -89,9 +89,9 @@ function loadRide(rideInfo)
 
 
 function initialize()
-    {
+{
     // Setup map and chart
-        var latlng = new google.maps.LatLng({{ride.center_latitude}}, {{ride.center_longitude}});
+    var latlng = new google.maps.LatLng({{ride.center_latitude}}, {{ride.center_longitude}});
 
     var myOptions = {
         zoom: 13,
@@ -113,13 +113,12 @@ function initialize()
     chartX = $('#chart_canvas').width();
     chartY = $('#chart_canvas').height();
     $('#map_canvas').height(chartX);
-
-    
+        
     chart = createChart('chart_canvas',chartX, chartY);
 
     drawChartBox();
 
-       $.ajax({ url: '{%url json_samples ride.guid "LAT,LON,DST,ALT,SPD" %}', dataType: 'json', context: document.body,
+    $.ajax({ url: '{%url json_samples ride.guid "LAT,LON,DST,ALT,SPD" %}', dataType: 'json', context: document.body,
         success: function(data)
         {
             loadRide(data);

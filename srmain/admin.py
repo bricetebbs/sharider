@@ -1,4 +1,4 @@
-from sharider.srmain.models import  Segment, Ride, RiderProfile,Marker, Route, WayPoint
+from srmain.models import  Segment, Ride, RiderProfile,Marker, Route, WayPoint
 from django.contrib import admin
 
 
