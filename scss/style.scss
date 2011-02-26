@@ -1,4 +1,7 @@
 @import url('boilerplate.css');
+$link_color: red;
+$border_color: red;
+$border_hover_color: green;
 
 body {
     max-width: 800px;
@@ -7,7 +10,7 @@ body {
     padding: 0px 50px;
 }
 
-a { color: #87c000; }
+a { color: $link_color }
 
 #container {
     position: relative;
@@ -45,7 +48,7 @@ h4 {
  * The styles for the standard block content area
  */
 #main {
-    border-top: 3px solid #87c000;
+    border-top: 3px solid $border_color;
     background: #fff;
     padding: 20px;
     -moz-border-radius-bottomright: 10px;
@@ -66,9 +69,9 @@ h4 {
     font-size: 90%;
     background: white;
     padding: 5px 10px 10px 10px;
-    border-left: 2px solid #87c000;
-    border-right: 2px solid #87c000;
-    border-bottom: 2px solid #87c000;
+    border-left: 2px solid $border_color;
+    border-right: 2px solid $border_color;
+    border-bottom: 2px solid $border_color;
     -moz-border-radius-bottomleft: 6px;
     -moz-border-radius-bottomright: 6px;
     -moz-border-bottom-left-radius: 6px;
@@ -80,7 +83,7 @@ h4 {
 
 #info_banner ul li {
    padding: 3px 0px;
-   border-bottom: 1px solid #87c000;
+   border-bottom: 1px solid $border_color;
 
 }
 
@@ -111,9 +114,9 @@ nav ul li a {
     -moz-border-top-left-radius: 5px;
     -webkit-border-top-right-radius: 5px;
     -webkit-border-top-left-radius: 5px;
-    border-top: 1px solid #87c000;
-    border-right: 1px solid #87c000;
-    border-left: 1px solid #87c000;
+    border-top: 1px solid $border_color;
+    border-right: 1px solid $border_color;
+    border-left: 1px solid $border_color;
     background: #87c000;
     color: #fff;
 }
@@ -121,9 +124,9 @@ nav ul li a {
 nav ul li a:hover {
     background: #fff;
     color: #87c000;
-    border-top: 1px solid #ddd705;
-    border-right: 1px solid #ddd705;
-    border-left: 1px solid #ddd705;
+    border-top: 1px solid $border_hover_color;
+    border-right: 1px solid $border_hover_color;
+    border-left: 1px solid $border_hover_color;
 
 }
 
