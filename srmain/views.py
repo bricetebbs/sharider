@@ -5,7 +5,6 @@ import logging
 
 from datetime import datetime
 
-
 from django.utils import simplejson
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
@@ -15,7 +14,7 @@ from django.views.generic.list_detail import object_list
 
 
 from srmain.models import Ride, Segment, Marker, RiderProfile, Route, WayPoint
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 
 from django.conf import settings
 

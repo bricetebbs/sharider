@@ -17,8 +17,6 @@ urlpatterns = patterns('',
     (r'^admin/', include(admin.site.urls)),
     (r'^accounts/login/$', 'django.contrib.auth.views.login'),
     (r'^accounts/logout/$','django.contrib.auth.views.logout'),
-    (r'^$', 'sharider.srmain.views.system_map'),
+     (r'^$', 'sharider.srmain.views.system_map'),
     
-    (r'^site_media/(?P<path>.*)$', 'django.views.static.serve',
-        {'document_root': settings.STATIC_DOCUMENT_ROOT}),
 )

@@ -6,10 +6,6 @@ TEMPLATE_DEBUG = True
 INSTALL_DIR = os.path.dirname(__file__) + "/"
 
 SEGMENT_DIR = INSTALL_DIR + 'segments/'
-STATIC_DOCUMENT_ROOT = INSTALL_DIR + 'site_media/'
-
-
-
 
 MARKER_TYPE_ERROR = 0
 MARKER_TYPE_RIDER = 1
@@ -93,11 +89,31 @@ MEDIA_ROOT = ''
 # trailing slash if there is a path component (optional in other cases).
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
 MEDIA_URL = ''
+STATIC_ROOT = ''
+STATIC_URL = '/static/'
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
 # Examples: "http://foo.com/media/", "/media/".
 ADMIN_MEDIA_PREFIX = '/static/adminmedia/'
+
+
+
+# Additional locations of static files
+STATICFILES_DIRS = (
+    INSTALL_DIR + 'static_files',
+    # Put strings here, like "/home/html/static" or "C:/www/django/static".
+    # Always use forward slashes, even on Windows.
+    # Don't forget to use absolute paths, not relative paths.
+)
+
+# List of finder classes that know how to find static files in
+# various locations.
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+#    'django.contrib.staticfiles.finders.DefaultStorageFinder',
+)
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 'njw2y^+3@zp4cjya8%3l@yncfck506!h*y-syassh=t&a_1*jc'
@@ -113,6 +129,8 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+# csrf ?
+    'django.middleware.transaction.TransactionMiddleware',
 )
 
 LOGIN_REDIRECT_URL = '/'
@@ -128,15 +146,20 @@ TEMPLATE_DIRS = (
     # Don't forget to use absolute paths, not relative paths.
     INSTALL_DIR +'templates',
 )
-TEMPLATE_CONTEXT_PROCESSORS = ('django.core.context_processors.request',
-                               'django.contrib.auth.context_processors.auth')
+TEMPLATE_CONTEXT_PROCESSORS = (
+    "django.contrib.auth.context_processors.auth",
+    "django.core.context_processors.debug",
+    "django.core.context_processors.i18n",
+    "django.core.context_processors.media",
+    "django.core.context_processors.static",
+    "django.contrib.messages.context_processors.messages")
 
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
-    # Uncomment the next line to enable the admin:
+    'django.contrib.staticfiles',
      'django.contrib.admin',
      'sharider.srmain'
 )

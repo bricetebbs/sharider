@@ -3,10 +3,9 @@
 
 {% block javascript %}
 
-{% include 'srmain/jquery.inc.html' %}
 
-<script type="text/javascript" src="/site_media/js/raphael-min.js"></script>
-<script type="text/javascript" src="/site_media/js/map_funcs.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/raphael-min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/map_funcs.js"></script>
 <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"> </script>
 
 <script type="text/javascript">
@@ -207,7 +206,7 @@ function setupRideList()
             for(var i = 0; i < data.ride_list.length; i++)
             {
                 var r = data.ride_list[i];
-                var lbl = '<a onclick="loadRide(\'' + r.guid + '\');">' + r.rider + ': ' + r.name + '</a><br/>';
+                var lbl = '<a onclick="loadRide(\'' + r.guid + '\',\'{{ STATIC_URL }}img/\');">' + r.rider + ': ' + r.name + '</a><br/>';
                 $('#anno_tab_rides').append(lbl);
              }
             $("a", "#anno_tab_rides").button();
@@ -245,7 +244,7 @@ function initialize()
     $.ajax({ url: '{% url all_markers %}', dataType: 'json', context: document.body,
         success: function(data)
         {
-            loadMarkers(map, data);
+            loadMarkers(map, data,'{{ STATIC_URL }}img/');
             setupMarkerOptions(data,'#anno_tab_options', makeMarkerVisibilityCallback);
               $("#map_options").buttonset();
         }
@@ -278,11 +277,12 @@ function initialize()
         });
 }
 
+$().ready(initialize());
+
 </script>
 {% endblock %}
 
 
-{% block bodytag %} <body onload="initialize();"> {% endblock %}
 {% block content %}
     
     <div id='anno_tab_holder' >
