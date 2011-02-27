@@ -18,12 +18,17 @@ urlpatterns = patterns('',
         name    = 'json_ride_list' 
     ),
      
-    
-      url (
-        regex = '^rider/(?P<rider_id>\d+)$',
+       url (
+        regex = '^rider/$',
         view =  'srmain.views.rider_detail',
         name = 'rider_detail'
         ),
+      url (
+        regex = '^rider/(?P<rider_id>\d+)/$',
+        view =  'srmain.views.rider_detail',
+        name = 'rider_detail'
+        ),
+      
     # Add new data with POS 
     url(
         regex   = '^upload/$', 

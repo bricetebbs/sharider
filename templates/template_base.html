@@ -43,7 +43,7 @@
 <div id="container">
 
 <header>
-<h1>Header</h1>
+<h1>Sharider</h1>
       {% if user.is_authenticated %}
         <div id="info_banner">
             <ul>
@@ -60,7 +60,7 @@
     <ul>
            {%  block sub_menu  %}
            {%  endblock %}
-           <li><a href="{{ settings.LOGOUT_URL }}">Logout</a></li>
+           <li><a href="{%  url signup_logout %}">Logout</a></li>
     </ul>
     </nav>
     {% endblock %}

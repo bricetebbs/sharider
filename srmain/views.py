@@ -23,7 +23,9 @@ from django.views.generic.simple import direct_to_template
 logger = logging.getLogger('sharider')
 
 
-def rider_detail(request, rider_id):
+def rider_detail(request, rider_id = None):
+    if not rider_id:
+        rider_id = request.user.id
     return HttpResponse("This will be the page for rider # %s" % rider_id, mimetype='text/plain')
 
 def ride_list(request):

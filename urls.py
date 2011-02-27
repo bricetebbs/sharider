@@ -8,6 +8,7 @@ admin.autodiscover()
 urlpatterns = patterns('',
     # Example:
     (r'^sharider/', include('sharider.srmain.urls')),
+    (r'^signup/', include('sharider.signup.urls')),
 
     # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 
     # to INSTALLED_APPS to enable admin documentation:
@@ -15,8 +16,6 @@ urlpatterns = patterns('',
 
     # Uncomment the next line to enable the admin:
     (r'^admin/', include(admin.site.urls)),
-    (r'^accounts/login/$', 'django.contrib.auth.views.login'),
-    (r'^accounts/logout/$','django.contrib.auth.views.logout'),
-     (r'^$', 'sharider.srmain.views.system_map'),
+    (r'^$', 'sharider.srmain.views.system_map'),
     
 )

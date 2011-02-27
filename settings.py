@@ -133,7 +133,9 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.transaction.TransactionMiddleware',
 )
 
-LOGIN_REDIRECT_URL = '/'
+LOGIN_URL= '/signup/login/'
+LOGOUT_URL= '/signup/logout/'
+LOGIN_REDIRECT_URL = '/sharider/rider/'
 
 ROOT_URLCONF = 'sharider.urls'
 
@@ -152,7 +154,10 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.i18n",
     "django.core.context_processors.media",
     "django.core.context_processors.static",
-    "django.contrib.messages.context_processors.messages")
+    "django.contrib.messages.context_processors.messages",
+     'sharider.context_processors.settings',
+)
+    
 
 INSTALLED_APPS = (
     'django.contrib.auth',
@@ -160,9 +165,21 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.staticfiles',
-     'django.contrib.admin',
-     'sharider.srmain'
+    'django.contrib.admin',
+    
+    'sharider.srmain',
+    'sharider.signup',
+
 )
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'blue@northnitch.com'
+EMAIL_HOST_PASSWORD ='bluepass'
+EMAIL_SUBJECT_PREFIX = '[Sharider]'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+SERVER_EMAIL = DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
 
 LOGGING = {
     'version': 1,

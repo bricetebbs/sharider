@@ -1,0 +1,10 @@
+
+{%  if new_user %}
+    Welcome new user,
+    To begin using your account:
+{% else %}
+Hello, {{ user }}
+    To login to your account:
+{% endif %}
+
+Click http://127.0.0.1:8000{% url signup_login_by_email uid token %}.
