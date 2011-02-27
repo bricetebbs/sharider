@@ -1,12 +1,42 @@
-@import url('boilerplate.css');
-$link_color: red;
-$border_color: red;
+@import 'boilerplate.scss';
+
+$body_background:#F0F2E9;
+$border_color: green;
 $border_hover_color: green;
+$link_color: #87c000;
+$widget_color: #fff;
+$widget_background: #87c000;
+
+$nav_color: $widget_color;
+$nav_background: $widget_background;
+
+$nav_hover_color: $nav_background;
+$nav_hover_background:  $nav_color;
+
+$button_background: $widget_background;
+$button_color: $widget_color;
+
+$button_hover_background:$widget_color;
+$button_hover_color: $widget_background;
+
+$warn_border_color: red;
+$warn_color: black;
+$warn_background: #ffb1b1;
+
+$table_background: #ccc;
+$table_odd_color: black;
+$table_even_color: black;
+$table_odd_background: #87c000;
+$table_even_background: #ccffcc;
+$table_header_background: #ccc;
+$table_header_color: black;
+$table_even_hover_background: yellow;
+$table_odd_hover_background: $table_even_hover_background;
 
 body {
     max-width: 800px;
     margin: 0px auto;
-    background: #F0F2E9;
+    background: $body_background;
     padding: 0px 50px;
 }
 
@@ -117,13 +147,13 @@ nav ul li a {
     border-top: 1px solid $border_color;
     border-right: 1px solid $border_color;
     border-left: 1px solid $border_color;
-    background: #87c000;
-    color: #fff;
+    background: $nav_background;
+    color: $nav_color;
 }
 
 nav ul li a:hover {
-    background: #fff;
-    color: #87c000;
+    background: $nav_hover_background;
+    color: $nav_hover_color;
     border-top: 1px solid $border_hover_color;
     border-right: 1px solid $border_hover_color;
     border-left: 1px solid $border_hover_color;
@@ -214,9 +244,9 @@ margin: 0px;
 
 .popup_warning {
     padding: 10px;
-    border: 2px solid red;
-    background: #ffb1b1;
-    color: black;
+    border: 2px solid $warn_border_color;
+    background: $warn_background;
+    color: $warn_color;
     font-weight: bold;
     font-size: 120%;
     -webkit-border-radius: 5px;
@@ -272,9 +302,9 @@ p {
 button{
     display: inline-block;
     margin:10px 15px;
-    background: #87c000;
-    color: #fff;
-    border:1px solid #999;
+    background: $button_background;
+    color: $button_color;
+    border:1px solid $button_color;
     font-family: sans-serif;
     font-size:115%;
     line-height:130%;
@@ -289,16 +319,16 @@ button{
 }
 
 button:hover {
-    border: 1px solid #87c000;
-    background: #fff;
-    color: #87c000;
+    border: 1px solid $button_hover_color;
+    background: $button_hover_background;
+    color: $button_hover_color;
 }
 
 /*
 * A table with lots of items
  */
 .table_list th {
-    background: #CCC;
+    background: $table_header_background;
 }
 .table_list {
     border: 1px solid black;
@@ -315,20 +345,20 @@ button:hover {
 }
 
 .table_list tr.odd  {
-    background: #87c000;
+    background: $table_odd_background;
     cursor:pointer;
 }
 
 .table_list tr.even  {
-    background: #ccffcc;
+    background: $table_even_background;
     cursor:pointer;
 }
 .table_list tbody tr.even:hover {
-   background: yellow;
+   background: $table_even_hover_background;
 }
 
 .table_list tbody tr.odd:hover {
-   background: yellow;
+   background: $table_odd_hover_background;;
 }
 
 
