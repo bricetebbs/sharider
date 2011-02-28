@@ -5,6 +5,7 @@ import logging
 
 from datetime import datetime
 
+from django.conf import settings
 from django.utils import simplejson
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
@@ -16,9 +17,7 @@ from django.views.generic.list_detail import object_list
 from srmain.models import Ride, Segment, Marker, RiderProfile, Route, WayPoint
 from django.shortcuts import get_object_or_404, render, redirect
 
-from django.conf import settings
-
-from django.views.generic.simple import direct_to_template
+from django.views.generic import ListView
 
 from django.contrib.auth.models import User
 
@@ -32,21 +31,30 @@ def rider_detail(request, rider_id = None):
     
     return render(request, 'srmain/rider_detail.html', dict(rider=rider))
 
+
+
+@login_required
+def route_list(request):
+    queryset = Route.objects.all()
+    return object_list(request, queryset=queryset)
 @login_required
 def ride_list(request):
-#    queryset = Ride.objects.filter(rider=request.user)
     queryset = Ride.objects.all()
+    return object_list(request, queryset=queryset)
+@login_required
+def marker_list(request):
+    queryset = Marker.objects.all()
     return object_list(request, queryset=queryset)
 
 
 @login_required
 def ride_map(request, ride_guid):
     ride = get_object_or_404(Ride, guid=ride_guid)
-    return render(request, 'srmain/ride_map.html', dict(ride = ride))
+    return render(request, 'srmain/system_map.html', dict(ride = ride))
 
 @login_required
 def system_map(request):
-    return direct_to_template(request, 'srmain/system_map.html', dict(dd="ddd"))
+    return render(request, 'srmain/system_map.html', dict(dd="ddd"))
 
 
 @login_required
@@ -55,8 +63,7 @@ def route_map(request, route_guid = None):
         route = get_object_or_404(Route, guid=route_guid)
     else:
         route = dict(guid=None)
-
-    return render(request, 'srmain/route_map.html', dict(route = route))
+    return render(request, 'srmain/system_map.html', dict(route = route))
 
 @login_required
 def ping_show(request):
@@ -252,9 +259,7 @@ def json_route(request, route_guid):
 
     return HttpResponse(simplejson.dumps(rval), mimetype='application/json')
 
-def route_list(request):
-    list_of_routes = Route.objects.all()
-    return object_list(request, queryset=list_of_routes)
+
 
 def json_route_list(request):
     list_of_routes = [ dict(name = route.name, guid = route.guid, creator=route.creator.username) for route in Route.objects.all()]

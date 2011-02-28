@@ -1,7 +1,11 @@
 Add Marker Add UI
-Consolidate Ride_map.html route_map.html and system_map.html
 ADD
 look into adding signup
+
+Make functions for add ride to map and add route to map.
+Use these to make ride and route pages.
+But main page is the same
+
 
 If a new recording is made all old ones are now in archive mode. Display only shows map and upload options 
 
@@ -25,3 +29,50 @@ Link to site in app
 Recover intra segment info and connect segments on website
 
 Save of GUID must stat in recording detail view controller
+
+
+function setupRouteList()
+{
+    console.log("Setup route list");
+    $.ajax({ url: '{% url json_route_list %}', dataType: 'json', context: document.body,
+        success: function(data)
+        {
+            $('#anno_tab_routes').empty(lbl);
+
+            $('#anno_tab_routes').append('<a onclick="clearRoute();"> Clear Route </a><br/>');
+            for(var i = 0; i < data.route_list.length; i++)
+            {
+                var r = data.route_list[i];
+                var lbl = '<a onclick="loadRoute(\'' + r.guid + '\');">' + r.creator + ': ' + r.name + '</a><br/>';
+                console.log(lbl);
+                $('#anno_tab_routes').append(lbl);
+             }
+            $("a", "#anno_tab_routes").button();
+
+        }
+    });
+}
+
+
+
+function setupRideList()
+{
+    console.log("Setup Ride list");
+    $.ajax({ url: '{% url json_ride_list %}', dataType: 'json', context: document.body,
+        success: function(data)
+        {
+            $('#anno_tab_rides').empty(lbl);
+            $('#anno_tab_rides').append('<a onclick="clearRide();"> Clear Ride </a><br/>');
+            for(var i = 0; i < data.ride_list.length; i++)
+            {
+                var r = data.ride_list[i];
+                var lbl = '<a onclick="loadRide(\'' + r.guid + '\',\'{{ STATIC_URL }}img/\');">' + r.rider + ': ' + r.name + '</a><br/>';
+                $('#anno_tab_rides').append(lbl);
+             }
+            $("a", "#anno_tab_rides").button();
+
+        }
+    });
+}
+
+

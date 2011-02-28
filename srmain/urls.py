@@ -11,12 +11,20 @@ urlpatterns = patterns('',
         view =  'srmain.views.ride_list',
         name = 'ride_list'
         ),
+
+
     
        url(
         regex   = '^ride/list/$',
         view    = 'srmain.views.json_ride_list', 
         name    = 'json_ride_list' 
     ),
+
+    url (
+        regex = '^spots/$',
+        view =  'srmain.views.marker_list',
+        name = 'marker_list'
+        ),
      
        url (
         regex = '^rider/$',

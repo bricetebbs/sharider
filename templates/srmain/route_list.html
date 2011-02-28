@@ -1,21 +1,36 @@
 {% extends 'template_base.html' %}
 {% block title %} Route List {% endblock %}
-{% block javascript %}
+
+{% block content %}
+
+<h2>Routes</h2>
+
+<button>Add A Route...</button>
+<table id='route_table' class='table_list'>
+    <thead>
+        <tr>
+        <th style='display: none'>Link</th><th>Rider</th><th>Route</th>
+        </tr>
+    </thead>
+    {% for route in object_list %}
+        <tr><td style='display:none;'>{% url route_map route.pk %}</td>
+            <td>{{ route.creator.username }}</td>
+            <td>{{ route.name }}</td>
+        </tr>
+    {% endfor %}
+</table>
 
 {% endblock %}
 
-{% block content %}
-<a href="{% url system_map %}">System Map</a>
-<h2>Routes</h2>
-{% if request.user.is_authenticated %}
-    <a href="{% url route_map %}">Add New Route</a><br>
-{% endif %}
-<table>
-{% for route in object_list %}
-    <tr>
-    <a href="{% url route_map route.pk %}">{{route.name}}:  {{ route.creator}} : {{ route.created_time}}</a><br>
-    </tr>
-{% endfor %}
-</table>
-
+{%  block javascript %}
+<script type="text/javascript">
+var my_route_table;
+$('#route_table tbody tr').click( function() {
+        var aData = my_route_table.fnGetData( this );
+        window.location.href=aData[0];
+});
+$(document).ready(function() {
+        my_route_table =  $('#route_table').dataTable({"aoColumnDefs": [ { "bVisible": false , 'aTargets':[0]}]});
+    } );
+ </script>
 {% endblock %}

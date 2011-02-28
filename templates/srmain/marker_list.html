@@ -1,0 +1,34 @@
+{% extends 'template_base.html' %}
+{% block title %} Spot List {% endblock %}
+{% block content %}
+    <h2>Spots</h2>
+
+    <button>Add A Spot...</button>
+    <table id='spot_table' class='table_list'>
+        <thead>
+        <tr>
+            <th style='display: none'>Link</th><th>Name</th><th>Type</th>
+        </tr>
+        </thead>
+        {% for marker in object_list %}
+            <tr>
+                <td> {{ marker.link }}</td>
+                <td>{{ marker.name }}</td>
+                <td>{{ marker.get_kind_display }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
+
+{%  block javascript %}
+<script type="text/javascript">
+var my_spot_table;
+$('#spot_table tbody tr').click( function() {
+        var aData = my_spot_table.fnGetData( this );
+        window.open(aData[0]);
+});
+$(document).ready(function() {
+        my_spot_table =  $('#spot_table').dataTable({"aoColumnDefs": [ { "bVisible": false , 'aTargets':[0]}]});
+    } );
+ </script>
+{% endblock %}

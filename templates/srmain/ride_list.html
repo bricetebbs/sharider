@@ -1,11 +1,35 @@
 {% extends 'template_base.html' %}
 {% block title %} Ride List {% endblock %}
 {% block content %}
-<a href="{% url system_map %}">System Map</a>
 
 <h2>RIDES</h2>
-{% for ride in object_list %}
-<a href="{% url ride_map ride.pk %}">{{ride.rider}}: {{ride.name}} : {{ ride.start_time}}</a><br>
-{% endfor %}
+<table id='ride_table' class='table_list'>
+    <thead>
+        <tr>
+        <th style='display: none'>Link</th><th>Rider</th><th>Ride</th><th>Start</th><th>End</th><th>Distance</th>
+        </tr>
+    </thead>
+    {% for ride in object_list %}
+        <tr><td style='display: none;'>{% url ride_map ride.pk %}</td>
+            <td>{{ ride.rider.username }}a</td>
+            <td>{{ ride.name }}d</td>
+            <td>{{ ride.start_time }}</td>
+            <td>{{ ride.end_time }}</td>
+            <td>{{ ride.html_distance }}</td>
+        </tr>
+    {% endfor %}
+</table>
+{% endblock %}
 
+{%  block javascript %}
+<script type="text/javascript">
+var my_ride_table;
+$('#ride_table tbody tr').click( function() {
+        var aData = my_ride_table.fnGetData( this );
+        window.location.href=aData[0];
+});
+$(document).ready(function() {
+        my_ride_table =  $('#ride_table').dataTable({"aoColumnDefs": [ { "bVisible": false , 'aTargets':[0]}]});
+    } );
+ </script>
 {% endblock %}

@@ -237,15 +237,15 @@ function loadRoute(routeGuid)
                 map.fitBounds(mapBounds);
                 
                 currentRouteGuid = data.guid;
-                
+                console.log("DDD=",data.creator, userPk);
                 if(data.creator == userPk)
                 {
-                    $('.edit_buttons').show();
-                    $("a", ".edit_buttons").button();
+                    $('.route_edit_controls').show();
+                    $("a", ".route_edit_controls").button();
                 }
                 else
                 {
-                    $('.edit_buttons').hide();
+                    $('.route_edit_controls').hide();
                 }
                 updateRoute(); 
             }
@@ -272,7 +272,6 @@ function clearRide()
 
 function loadRide(rideGuid, img_path)
 {
-    console.log(rideGuid, img_path);
     if (rideGuid.length == 0)
     {
         clearRide();
