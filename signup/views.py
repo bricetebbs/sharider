@@ -21,6 +21,8 @@ from django.conf import settings
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.utils.translation import ugettext as _
 
+
+
 class SignupEmailForm(forms.Form):
     email_address = forms.EmailField()
 
@@ -37,10 +39,8 @@ def send_email_auth_token(request, user, new_user=False):
             'token': token_generator.make_token(user),
             'new_user' : new_user,
         }
-    send_mail(_("New Login token for %s") % site_name, t.render(Context(c)), 'blue@nothnitch.com',
+    send_mail(_("New Login token for %s") % site_name, t.render(Context(c)), 'blue@northnitch.com',
                   [user.email])
-
-
 
 def signup_email(request):
     email_form = SignupEmailForm(request.POST)
@@ -55,12 +55,14 @@ def signup_email(request):
             user =  User.objects.create_user(email, email, '')
             send_email_auth_token(request, user, new_user=True)
 
-    return HttpResponse('Check your email for a login token.')
+    return HttpResponse('Check your email %s for a login token.' % email)
 
 #
 #  We can override the templates in here
 #
 def signup_login(request):
+    if request.user.is_authenticated():
+        return redirect(settings.LOGIN_REDIRECT_URL)
     email_form = SignupEmailForm
     return login_view(request, template_name='signup/login_main.html',
                     extra_context=dict(email_form=email_form))

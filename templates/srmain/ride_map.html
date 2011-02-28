@@ -4,7 +4,7 @@
 {% block javascript %}
 
 
-<script type="text/javascript" src={{STATIC_URL}}js/raphael-min.js"></script>
+<script type="text/javascript" src="{{STATIC_URL}}js/raphael-min.js"></script>
 <script type="text/javascript" src="{{STATIC_URL}}js/map_funcs.js"></script>
 <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"> </script>
 <script type="text/javascript">
@@ -14,7 +14,6 @@ var posMarker;
 
 var distanceMax = {{ ride.distance }};
 var distanceMin = 0;
-
 
 var infowindow;
 var map;
@@ -55,7 +54,7 @@ function drawChartDisplay(chart)
         pointsData, 2, 3, 'black');
 }
 
-function loadRide(rideInfo)
+function loadRideInfo(rideInfo)
 {
     pointsData = rideInfo;
     var data = rideInfo;
@@ -117,13 +116,12 @@ function initialize()
 
     drawChartBox();
 
-    $.ajax({ url: '{%url json_samples ride.guid "LAT,LON,DST,ALT,SPD" %}', dataType: 'json', context: document.body,
+    $.ajax({ url: '{%url json_ride ride.guid "LAT,LON,DST,ALT,SPD" %}', dataType: 'json', context: document.body,
         success: function(data)
         {
-            loadRide(data,'{{ STATIC_URL }}img/');
+            loadRideInfo(data.points);
         }
     });
-
 
     $.ajax({ url: '{% url fixed_markers %}', dataType: 'json', context: document.body,
         success: function(data)
@@ -145,10 +143,11 @@ function initialize()
     });
 }
 
+$().ready(initialize());
 </script>
+
 {% endblock %}
 
-{% block bodytag %}<body onload="initialize();"> {% endblock %}
 {% block content %}
 <h2>{{ride.name}}</h2>
 <a href="{% url ride_list %}">Rides</a>
@@ -163,7 +162,7 @@ function initialize()
         <th>Distance</th><th>Speed</th><th>Altitude</th>
     </tr>
     <tr>
-        <td> <span id="cur_distance"/>-</span><td> <span id="cur_speed"/>-</span><td> <span id="cur_altitude"/>-</span>
+        <td> <span id="cur_distance">-</span><td> <span id="cur_speed">-</span><td> <span id="cur_altitude">-</span>
     </tr>
 </table>
 

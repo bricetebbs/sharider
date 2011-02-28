@@ -77,23 +77,19 @@ function updateRoute(event)
         directionsDisplay.setMap(null);
         return;
     }
-   
+
     var request = {
-      origin:wayPoints[0].location,
-      destination: wayPoints[wayPoints.length-1].location,
-      waypoints: wayPoints.slice(1, wayPoints.length-1),
-      travelMode: google.maps.DirectionsTravelMode.BICYCLING,
+        origin:wayPoints[0].location,
+        destination: wayPoints[wayPoints.length-1].location,
+        waypoints: wayPoints.slice(1, wayPoints.length-1),
+        travelMode: google.maps.DirectionsTravelMode.BICYCLING
     };
     directionsService.route(request, function(response, status) {
-
-     if (status == google.maps.DirectionsStatus.OK) {
-       
-     
-        latestDirections = response;
-        
-        directionsDisplay.setDirections(response);
-        directionsDisplay.setMap(map);
-      }
+        if (status == google.maps.DirectionsStatus.OK) {
+            latestDirections = response;
+            directionsDisplay.setDirections(response);
+            directionsDisplay.setMap(map);
+        }
     });
 }
 
@@ -135,22 +131,17 @@ function updateDirections(directions)
 
 function adjustToWindowSize()
 {
-        console.log("Resize");
-        
+    chartX = $('#chart_canvas').width();
+    chartY = $('#chart_canvas').height();
 
-      
-        chartX = $('#chart_canvas').width();
-        chartY = $('#chart_canvas').height();
-       
-        resizeChart(chart, chartX, chartY);
-        
-        if(rideInfo != null)
-        {
-              drawChartDisplay(chart, rideInfo);
-        }
-        
-        
-     $('#map_canvas').height($('#map_canvas').width());
+    resizeChart(chart, chartX, chartY);
+
+    if(rideInfo != null)
+    {
+        drawChartDisplay(chart, rideInfo);
+    }
+
+    $('#map_canvas').height($('#map_canvas').width());
 }
 
 function setupDirectionDisplay(panelId, updateFunction)
@@ -284,29 +275,30 @@ $().ready(initialize());
 
 
 {% block content %}
-    
-    <div id='anno_tab_holder' >
-        <ul>
-            <li><a href="#anno_tab_rides">Rides</a></li>
-            <li><a href="#anno_tab_routes">Routes</a></li>
-             <li><a href="#anno_tab_options">Options</a></li>  
-             <li><a href="#anno_tab_edit">Edit</a></li>  
-        </ul>
-        <div id="anno_tab_rides" ></div>
-        <div id="anno_tab_routes" ></div>
-        <div id="anno_tab_options" class='map_options'></div>
-        <div id="anno_tab_edit"> 
-                        <div class="edit_buttons" style='display: none'>
-                    <a onclick='clearRoute();'>Clear Route </a>
-                    <a onclick='saveCurrentRoute();'> Save Route</a> Name: <input id="route_name"type="text" name="lname" />
-                </div>
+
+<div id='anno_tab_holder' >
+    <ul>
+        <li><a href="#anno_tab_rides">Rides</a></li>
+        <li><a href="#anno_tab_routes">Routes</a></li>
+        <li><a href="#anno_tab_options">Options</a></li>
+        <li><a href="#anno_tab_edit">Edit</a></li>
+    </ul>
+    <div id="anno_tab_rides" ></div>
+    <div id="anno_tab_routes" ></div>
+    <div id="anno_tab_options" class='map_options'></div>
+    <div id="anno_tab_edit">
+        <div class="edit_buttons" style='display: none'>
+            <a onclick='clearRoute();'>Clear Route </a>
+            <a onclick='saveCurrentRoute();'> Save Route</a> Name: <input id="route_name"type="text" name="lname" />
         </div>
     </div>
-    
-    <div id="map_canvas" style="width:100%;height:100%;"></div>
-    <div >
+</div>
+
+<div id="map_canvas" style="width:100%;height:100%;"></div>
+<div >
     <div id="chart_canvas" mousemoved="mouseMoved(event);"  style="width:100%; height:100px;"></div>
-    </div>
-    <div id="directions_panel" style="float:right;width:100%;height 100%">  </div>
+</div>
+<div id="directions_panel" style="float:right;width:100%;height 100%">
+</div>
 
 {% endblock %}

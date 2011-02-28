@@ -134,7 +134,7 @@ function highlight(index)
 
 function chartPick(ex, ey, id)
 {
-    pos = $('#' + id).position();
+    pos = $('#' + id).offset();
     x = (ex - pos.left) / chartX;
     y = 1.0 - (ey - pos.top) / chartY;
     distance = distanceMin + x * (distanceMax - distanceMin);
@@ -152,7 +152,6 @@ function chartPick(ex, ey, id)
         }
     }
     highlight(found);
-    
 }
 
 function mouseMoved(event) 
@@ -273,6 +272,7 @@ function clearRide()
 
 function loadRide(rideGuid, img_path)
 {
+    console.log(rideGuid, img_path);
     if (rideGuid.length == 0)
     {
         clearRide();

@@ -1,11 +1,11 @@
 @import 'boilerplate.scss';
 
 $body_background:#F0F2E9;
-$border_color: green;
-$border_hover_color: green;
-$link_color: #87c000;
+$border_color: #d19405;
+$border_hover_color: #d19405;
+$link_color: #d19405;
 $widget_color: #fff;
-$widget_background: #87c000;
+$widget_background: #fece2f;
 
 $nav_color: $widget_color;
 $nav_background: $widget_background;
@@ -26,8 +26,8 @@ $warn_background: #ffb1b1;
 $table_background: #ccc;
 $table_odd_color: black;
 $table_even_color: black;
-$table_odd_background: #87c000;
-$table_even_background: #ccffcc;
+$table_odd_background: #fece2f;
+$table_even_background: #e36d27;
 $table_header_background: #ccc;
 $table_header_color: black;
 $table_even_hover_background: yellow;

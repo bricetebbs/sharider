@@ -20,28 +20,36 @@ from django.conf import settings
 
 from django.views.generic.simple import direct_to_template
 
+from django.contrib.auth.models import User
+
 logger = logging.getLogger('sharider')
 
-
+@login_required
 def rider_detail(request, rider_id = None):
     if not rider_id:
         rider_id = request.user.id
-    return HttpResponse("This will be the page for rider # %s" % rider_id, mimetype='text/plain')
+    rider = get_object_or_404(User, pk=rider_id)
+    
+    return render(request, 'srmain/rider_detail.html', dict(rider=rider))
 
+@login_required
 def ride_list(request):
 #    queryset = Ride.objects.filter(rider=request.user)
     queryset = Ride.objects.all()
     return object_list(request, queryset=queryset)
 
 
+@login_required
 def ride_map(request, ride_guid):
     ride = get_object_or_404(Ride, guid=ride_guid)
     return render(request, 'srmain/ride_map.html', dict(ride = ride))
 
+@login_required
 def system_map(request):
     return direct_to_template(request, 'srmain/system_map.html', dict(dd="ddd"))
 
 
+@login_required
 def route_map(request, route_guid = None):
     if route_guid:
         route = get_object_or_404(Route, guid=route_guid)
@@ -50,6 +58,7 @@ def route_map(request, route_guid = None):
 
     return render(request, 'srmain/route_map.html', dict(route = route))
 
+@login_required
 def ping_show(request):
     return render(request, 'srmain/ping_show.html')
 
@@ -215,7 +224,7 @@ def save_route(request):
 
     WayPoint.objects.filter(route = route).delete()
 
-    for p,o in enumerate(way_points):
+    for o,p in enumerate(way_points):
         wp = WayPoint(route = route, order = o, latitude = p[0], longitude = p[1])
         wp.save()
 

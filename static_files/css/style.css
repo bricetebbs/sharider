@@ -294,7 +294,7 @@ body {
   padding: 0px 50px; }
 
 a {
-  color: #87c000; }
+  color: #d19405; }
 
 #container {
   position: relative; }
@@ -327,7 +327,7 @@ h4 {
  * The styles for the standard block content area
  */
 #main {
-  border-top: 3px solid green;
+  border-top: 3px solid #d19405;
   background: #fff;
   padding: 20px;
   -moz-border-radius-bottomright: 10px;
@@ -347,9 +347,9 @@ h4 {
   font-size: 90%;
   background: white;
   padding: 5px 10px 10px 10px;
-  border-left: 2px solid green;
-  border-right: 2px solid green;
-  border-bottom: 2px solid green;
+  border-left: 2px solid #d19405;
+  border-right: 2px solid #d19405;
+  border-bottom: 2px solid #d19405;
   -moz-border-radius-bottomleft: 6px;
   -moz-border-radius-bottomright: 6px;
   -moz-border-bottom-left-radius: 6px;
@@ -360,7 +360,7 @@ h4 {
 
 #info_banner ul li {
   padding: 3px 0px;
-  border-bottom: 1px solid green; }
+  border-bottom: 1px solid #d19405; }
 
 #info_banner span {
   width: 60px;
@@ -386,18 +386,18 @@ nav ul li a {
   -moz-border-top-left-radius: 5px;
   -webkit-border-top-right-radius: 5px;
   -webkit-border-top-left-radius: 5px;
-  border-top: 1px solid green;
-  border-right: 1px solid green;
-  border-left: 1px solid green;
-  background: #87c000;
+  border-top: 1px solid #d19405;
+  border-right: 1px solid #d19405;
+  border-left: 1px solid #d19405;
+  background: #fece2f;
   color: white; }
 
 nav ul li a:hover {
   background: white;
-  color: #87c000;
-  border-top: 1px solid green;
-  border-right: 1px solid green;
-  border-left: 1px solid green; }
+  color: #fece2f;
+  border-top: 1px solid #d19405;
+  border-right: 1px solid #d19405;
+  border-left: 1px solid #d19405; }
 
 .answers input[type="text"] {
   margin: 5px 0px;
@@ -517,7 +517,7 @@ p {
 button {
   display: inline-block;
   margin: 10px 15px;
-  background: #87c000;
+  background: #fece2f;
   color: white;
   border: 1px solid white;
   font-family: sans-serif;
@@ -534,9 +534,9 @@ button {
   -moz-box-shadow: 0px 0px 5px black; }
 
 button:hover {
-  border: 1px solid #87c000;
+  border: 1px solid #fece2f;
   background: white;
-  color: #87c000; }
+  color: #fece2f; }
 
 /*
 * A table with lots of items
@@ -556,11 +556,11 @@ button:hover {
   padding: 2px 6px; }
 
 .table_list tr.odd {
-  background: #87c000;
+  background: #fece2f;
   cursor: pointer; }
 
 .table_list tr.even {
-  background: #ccffcc;
+  background: #e36d27;
   cursor: pointer; }
 
 .table_list tbody tr.even:hover {

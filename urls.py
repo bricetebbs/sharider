@@ -16,6 +16,6 @@ urlpatterns = patterns('',
 
     # Uncomment the next line to enable the admin:
     (r'^admin/', include(admin.site.urls)),
-    (r'^$', 'sharider.srmain.views.system_map'),
+    (r'^$','sharider.signup.views.signup_login'),
     
 )

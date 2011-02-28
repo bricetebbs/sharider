@@ -1,0 +1,36 @@
+{% extends 'template_base.html' %}
+{% block title %} Rider Detal {% endblock %}
+
+
+{% block content %}
+<h3>{{ rider.username }}</h3>
+
+
+<table id='my_table' class='table_list'>
+    <thead>
+        <th style='display: none'>Link</th><th>Rider</th><th>Ride</th><th>Start</th><th>End</th><th>Distance</th>
+    </thead>
+    {% for ride in rider.ride_set.all %}
+        <tr><td style='display:none;'>{% url ride_map ride.pk %}</td>
+            <td>{{ ride.rider.username }}</td>
+            <td>{{ ride.name }}</td>
+            <td>{{ ride.start_time }}</td>
+            <td>{{ ride.end_time }}</td>
+            <td>{{ ride.html_distance }}</td>
+        </tr>
+    {% endfor %}
+</table>
+{%  endblock %}
+
+{%  block javascript %}
+<script type="text/javascript">
+var my_list_table;
+$('#my_table tbody tr').click( function() {
+        var aData = my_list_table.fnGetData( this );
+        window.location.href=aData[0];
+});
+$(document).ready(function() {
+        my_list_table =  $('#my_table').dataTable({"aoColumnDefs": [ { "bVisible": false , 'aTargets':[0]}]});
+    } );
+ </script>
+{% endblock %}

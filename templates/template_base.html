@@ -59,6 +59,8 @@
     <nav>
     <ul>
            {%  block sub_menu  %}
+           <li><a href="{%  url system_map %}">System Map</a></li>
+           <li><a href="{%  url rider_detail %}">My Page</a></li>
            {%  endblock %}
            <li><a href="{%  url signup_logout %}">Logout</a></li>
     </ul>
@@ -84,6 +86,7 @@
 
 
 <script type="text/javascript" src="{{ STATIC_URL }}js/libs/jquery-ui-1.8.10.custom.min.js"></script>
+<script type="text/javascript" language="javascript" src="{{ STATIC_URL }}js/libs/jquery.dataTables.min.js"></script>
 
 <!-- scripts concatenated and minified via ant build script-->
 <script src="{{ STATIC_URL }}js/plugins.js"></script>
