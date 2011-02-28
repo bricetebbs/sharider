@@ -5,7 +5,7 @@
 
 
 <script type="text/javascript" src="{{ STATIC_URL }}js/raphael-min.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}js/map_funcs.js?2"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/map_funcs.js?3"></script>
 <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"> </script>
 
 <script type="text/javascript">
@@ -30,6 +30,8 @@ var chartY = 100;
 
 var currentRouteGuid = {% if route %} '{{ route.pk}}' {% else %}null {% endif %};
 var currentRideGuid = {% if ride %} '{{ ride.pk}}' {% else %}null {% endif %};
+
+var routeEditing = {% if route_editing %} true {% else %} false {% endif  %};
 
 
 // Setup information from template
@@ -70,7 +72,7 @@ var wayPoints = new Array;
 
 var directionsDisplay;
 
-function updateRoute(event)
+function requestUpdatedRoute(event)
 {
     if(wayPoints.length < 1)
     {
@@ -94,10 +96,10 @@ function updateRoute(event)
 }
 
 
-function addPoint(event)
+function addWayPoint(event)
 {
     wayPoints.push({ location: event.latLng });
-    updateRoute();
+    requestUpdatedRoute();
 }
 
 function clearRoute()
@@ -108,18 +110,16 @@ function clearRoute()
     document.getElementById('route_name').value ='';
                 
     $('#directions_panel').empty();
-    updateRoute();
+    requestUpdatedRoute();
 }
 
-
+function routeSaved()
+{
+    console.log("Route Saved");
+}
 function saveCurrentRoute()
 {
-    saveRoute(currentRouteGuid,  latestDirections, setupRouteList);
-}
-
-function onClick(event)
-{
-    addPoint(event);
+    saveRoute(currentRouteGuid,  latestDirections, routeSaved);
 }
 
 function updateDirections(directions)
@@ -149,11 +149,11 @@ function setupDirectionDisplay(panelId, updateFunction)
     var rendererOptions = {
         draggable: true,
         preserveViewport: true,
-        suppressBicyclingLayer : true
+        suppressBicyclingLayer : true,
+        draggable: routeEditing
     };
 
     directionsDisplay = new google.maps.DirectionsRenderer(rendererOptions);
-    
     
     google.maps.event.addListener(directionsDisplay, 'directions_changed',  updateFunction)
 
@@ -183,9 +183,8 @@ function initialize()
     
     setupDirectionDisplay("directions_panel", function() { updateDirections(directionsDisplay.directions);} )
 
-    google.maps.event.addListener(map, 'click', onClick);
-
-   
+    if(routeEditing)
+        google.maps.event.addListener(map, 'click', addWayPoint);
     
     $.ajax({ url: '{% url all_markers %}', dataType: 'json', context: document.body,
         success: function(data)
@@ -203,7 +202,7 @@ function initialize()
    
     if (currentRouteGuid)
     {
-        loadRoute(currentRouteGuid);
+        loadRoute(currentRouteGuid, routeEditing);
     }
     
     if (currentRideGuid)
@@ -211,13 +210,12 @@ function initialize()
         loadRide(currentRideGuid,'{{ STATIC_URL}}img/');
         $('#ride_detail').show();
     }
-  
-
 
     // If the screen resizes we may need to deal with it
     $(window).resize(function() {         
             adjustToWindowSize();
         });
+
 }
 
 $().ready(initialize());
@@ -227,11 +225,10 @@ $().ready(initialize());
 
 
 {% block content %}
-    <div id="route_edit_options" {%if not route %} style='display: none;'{% endif %}>
-        <div class="route_edit_controls" style='display: none;'>
-            <a onclick='clearRoute();'>Clear Route </a>
-            <a onclick='saveCurrentRoute();'> Save Route</a> Name: <input id="route_name"type="text" name="lname" />
-        </div>
+    <div id="route_edit_controls" {%if not route_editing %} style='display: none;'{% endif %}>
+            <button onclick='clearRoute();'>Clear Route </button>
+            <button onclick='saveCurrentRoute();'> Save Route</button>
+            Name: <input id="route_name"type="text" name="lname" />
     </div>
 
 <div id='ride_detail' {% if not ride %}style='display: none;' {% endif %}>

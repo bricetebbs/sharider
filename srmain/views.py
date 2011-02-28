@@ -46,7 +46,6 @@ def marker_list(request):
     queryset = Marker.objects.all()
     return object_list(request, queryset=queryset)
 
-
 @login_required
 def ride_map(request, ride_guid):
     ride = get_object_or_404(Ride, guid=ride_guid)
@@ -59,11 +58,15 @@ def system_map(request):
 
 @login_required
 def route_map(request, route_guid = None):
+    route_editing = False
     if route_guid:
         route = get_object_or_404(Route, guid=route_guid)
+        if route.creator == request.user:
+            route_editing = True
     else:
         route = dict(guid=None)
-    return render(request, 'srmain/system_map.html', dict(route = route))
+        route_editing = True
+    return render(request, 'srmain/system_map.html', dict(route = route, route_editing=route_editing))
 
 @login_required
 def ping_show(request):

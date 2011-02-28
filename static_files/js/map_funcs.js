@@ -204,10 +204,9 @@ function saveRoute(routeGuid, latestDirections, successFunction)
     var foo =  {name : name_input,  points: pts , route_guid: routeGuid, distance: 0.0};
     
     $.ajax({type: 'POST', url: '/sharider/route/save/', data: JSON.stringify(foo), dataType : 'text', success: successFunction});
-    
 }
 
-function loadRoute(routeGuid)
+function loadRoute(routeGuid, routeEditing)
 {
     if (routeGuid.length == 0)
     {
@@ -237,17 +236,8 @@ function loadRoute(routeGuid)
                 map.fitBounds(mapBounds);
                 
                 currentRouteGuid = data.guid;
-                console.log("DDD=",data.creator, userPk);
-                if(data.creator == userPk)
-                {
-                    $('.route_edit_controls').show();
-                    $("a", ".route_edit_controls").button();
-                }
-                else
-                {
-                    $('.route_edit_controls').hide();
-                }
-                updateRoute(); 
+               
+                requestUpdatedRoute();
             }
         });
     }
