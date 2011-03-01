@@ -382,8 +382,8 @@ nav ul li a {
   font-weight: bold;
   letter-spacing: -1px;
   padding: 7px 10px 4px 10px;
-  -moz-border-top-right-radius: 5px;
-  -moz-border-top-left-radius: 5px;
+  -moz-border-radius-topright: 5px;
+  -moz-border-radius-topleft: 5px;
   -webkit-border-top-right-radius: 5px;
   -webkit-border-top-left-radius: 5px;
   border-top: 1px solid #d19405;
@@ -568,6 +568,10 @@ button:hover {
 
 .table_list tbody tr.odd:hover {
   background: yellow; }
+
+#marker_link input {
+  margin: 5px 0px;
+  size: 900px; }
 
 /*
  * Media queries for responsive design

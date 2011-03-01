@@ -1,10 +1,14 @@
 Add Marker Add UI
-ADD
-look into adding signup
+Add Username/password setup
 
-Make functions for add ride to map and add route to map.
-Use these to make ride and route pages.
-But main page is the same
+
+
+
+route search enter to points show routes which take you from a to b
+Why does missing file generate a 500
+Add button in spot edit to move marker to center of view
+Fix Marker options to show the ones we care about
+
 
 
 If a new recording is made all old ones are now in archive mode. Display only shows map and upload options 

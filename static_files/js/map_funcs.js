@@ -11,7 +11,14 @@ function attachURL(marker) {
     google.maps.event.addListener(marker, 'click', function(e) { showInfoWindow(marker); });
 }
 
-function loadMarkers(map, data, path)
+
+function setMarkerIcon(marker)
+{
+    path = markerIconPath  + markerInfoTable[marker.my_kind].icon;
+    marker.setIcon(path);
+}
+
+function loadMarkers(map, data)
 {
     var mlist = data.markers;
     for (i = 0; i < mlist.length; i++)
@@ -19,29 +26,93 @@ function loadMarkers(map, data, path)
         m = mlist[i];
         var latlng = new google.maps.LatLng(m.latitude, m.longitude);
         marker = new google.maps.Marker({ title: m.name,
-                    position: latlng, map: map,
-                    shadow: path + 's_' + m.icon,
-                    icon: path  + m.icon});
-        marker.my_link = m.link;
+                    position: latlng, map: map});
+
         marker.my_kind = m.kind;
+        marker.my_link = m.link;
         marker.my_hover = m.hover
         marker.my_name = m.name;
+        marker.my_pk = m.pk;
+        setMarkerIcon(marker);
         attachURL(marker);
         // need a little closure here
         allMarkers.push(marker);
     }
 }
 
-
-function setupMarkerOptions(data, div_name, callback_maker)
+function saveMarker()
 {
-     marker_info = data.info_table;
+    var minfo =  {
+        pk: currentMarker.my_pk,
+        latitude : currentMarker.position.lat(),
+        longitude : currentMarker.position.lng(),
+        link: $('#marker_link').val(),
+        name:  $('#marker_name').val(),
+        kind:  $('#marker_kind').val()
+    };
+    $.ajax({type: 'POST', url: '/sharider/spot/save/', data: JSON.stringify(minfo), dataType : 'text', success: null});
+}
+function markerTypeChanged()
+{
+    currentMarker.my_kind = $('#marker_kind').val();
+    setMarkerIcon(currentMarker);
+}
+
+function markerToViewCenter()
+{
+    currentMarker.setPosition(map.getCenter());
+}
+function updateMarker(zoom)
+{
+    map.setCenter( currentMarker.position);
+    if(zoom)
+        map.setZoom(zoom);
+    currentMarker.setDraggable(true);
+    $('#marker_name').val(currentMarker.my_name);
+    $('#marker_link').val(currentMarker.my_link);
+}
+
+function  loadMarker(currentMarkerId, newKind)
+{
+    for (i = 0; i < allMarkers.length; i++)
+    {
+        m = allMarkers[i];
+        if(m.my_pk == currentMarkerId)
+        {
+            currentMarker = m;
+            updateMarker(17);
+            return;
+        }
+    }
+    // No marker found make one
+     var latlng = new google.maps.LatLng(m.latitude, m.longitude);
+        name = 'New Spot'
+        marker = new google.maps.Marker({ title: name,
+                    position: map.getCenter(),
+                    map: map});
+        marker.my_pk = 0;
+        marker.my_link = '';
+        marker.my_kind = newKind;
+        marker.my_hover = null;
+        marker.my_name = name;
+        setMarkerIcon(marker);
+
+        attachURL(marker);
+
+    currentMarker = marker;
+    updateMarker(0);
+}
+
+
+function setupMarkerOptions(div_name, callback_maker)
+{
    
     // Make the html for the checkboxes
     options = '';
-    for (var key in marker_info)
+    
+    for (var key in markerInfoTable)
     {
-        mi = marker_info[key];
+        mi = markerInfoTable[key];
         if (mi.enabled == true)
         {
             options += '<input type="checkbox" id="MO_' + mi.option_tag;
@@ -53,9 +124,9 @@ function setupMarkerOptions(data, div_name, callback_maker)
     $(div_name).html(options);
 
     // Attach handlers
-    for (var key in marker_info)
+    for (var key in markerInfoTable)
     {
-        mi = marker_info[key];
+        mi = markerInfoTable[key];
         if (mi.enabled == true)
         {
             $('#MO_' + mi.option_tag).change(callback_maker(key));

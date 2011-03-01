@@ -27,6 +27,7 @@ class RiderProfile(models.Model):
         return dict(latitude = self.recent_latitude,
                     longitude = self.recent_longitude,
                     kind = settings.MARKER_TYPE_RIDER,
+                    pk = -1,
                     name = self.user.username, 
                     link = reverse('rider_detail', args=[self.user.id]),
                     icon = settings.MARKER_INFO[settings.MARKER_TYPE_RIDER]['icon'],
@@ -163,6 +164,11 @@ class Marker(models.Model):
     latitude = models.FloatField(default = 0.0)
     longitude = models.FloatField(default = 0.0)
     custom_icon = models.CharField(max_length = 100,blank=True, null=True)
+
+    creator = models.ForeignKey(User)
+    created_time = models.DateTimeField(auto_now_add=True)
+    modified_time = models.DateTimeField(auto_now=True)
+
     
     def __unicode__(self):
         return self.name + u':' + self.get_kind_display()
@@ -170,6 +176,7 @@ class Marker(models.Model):
     def dict_for_json(self):
         return dict(latitude = self.latitude, longitude = self.longitude, kind = self.kind,
                     name = self.name, link = self.link,
+                    pk = self.id,
                     icon = settings.MARKER_INFO[self.kind]['icon'],
                     hover = self.hover_html)
     
@@ -179,8 +186,8 @@ class Route(models.Model):
     name = models.CharField(max_length = 200)
     kind = models.PositiveIntegerField(default = 0)
     creator = models.ForeignKey(User)
-    created_time = models.DateTimeField(null=True, blank=True)
-    modified_time = models.DateTimeField(null=True, blank=True)
+    created_time = models.DateTimeField(auto_now_add=True)
+    modified_time = models.DateTimeField(auto_now=True)
     distance = models.FloatField(default = 0.0)
     
     def save(self, *args, **kwargs):

@@ -2,7 +2,7 @@ from django.conf.urls.defaults import *
 
 urlpatterns = patterns('',
     url (
-        regex = '^ride/map/(?P<ride_guid>[-\w]+)$',
+        regex = '^ride/map/(?P<ride_guid>[-\w]+)/$',
         view =  'srmain.views.ride_map',
         name = 'ride_map'
         ),
@@ -25,7 +25,27 @@ urlpatterns = patterns('',
         view =  'srmain.views.marker_list',
         name = 'marker_list'
         ),
-     
+
+      url (
+        regex = '^spots/map/$',
+        view =  'srmain.views.marker_map',
+        name = 'marker_map'
+        ),
+      
+       url (
+        regex = '^spots/map/(?P<marker_id>\d+)/$',
+        view =  'srmain.views.marker_map',
+        name = 'marker_map'
+        ),
+
+
+       url(
+          regex   = '^spot/save/$',
+          view    = 'srmain.views.save_marker',
+          name    = 'save_marker'
+      ),
+
+       
        url (
         regex = '^rider/$',
         view =  'srmain.views.rider_detail',

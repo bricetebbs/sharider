@@ -46,27 +46,69 @@ def marker_list(request):
     queryset = Marker.objects.all()
     return object_list(request, queryset=queryset)
 
+
+@login_required
+def save_marker(request):
+
+    json_data = simplejson.loads(request.raw_post_data)
+
+    print json_data
+    if json_data['pk']:
+        marker = Marker.objects.get(pk=int(json_data['pk']))
+    else:
+        marker = Marker(creator=request.user)
+    marker.link = json_data['link']
+    marker.kind = int(json_data['kind'])
+    marker.name = json_data['name']
+    marker.latitude = float(json_data['latitude'])
+    marker.hover_html = ''
+    marker.custom_icon = ''
+    marker.longitude = float(json_data['longitude'])
+
+
+    marker.save()
+    
+    return HttpResponse(simplejson.dumps(dict(response='OK'), default=jsonhandler), mimetype='application/json');
+
 @login_required
 def ride_map(request, ride_guid):
     ride = get_object_or_404(Ride, guid=ride_guid)
-    return render(request, 'srmain/system_map.html', dict(ride = ride))
+    return render(request, 'srmain/system_map.html', dict(ride = ride,
+                                                          marker_info = simplejson.dumps(settings.MARKER_INFO)))
 
 @login_required
 def system_map(request):
-    return render(request, 'srmain/system_map.html', dict(dd="ddd"))
+    return render(request, 'srmain/system_map.html', dict(marker_info = simplejson.dumps(settings.MARKER_INFO)))
+
+@login_required
+def marker_map(request, marker_id=None):
+    marker_editing = False
+    if marker_id:
+        marker = get_object_or_404(Marker, pk=marker_id)
+        if marker.creator == request.user:
+            marker_editing = True
+    else:
+        marker = Marker(kind=settings.MARKER_TYPE_CAUTION)
+        marker_editing = True
+    return render(request, 'srmain/system_map.html', dict(marker = marker,
+                                                          marker_info = simplejson.dumps(settings.MARKER_INFO),
+                                                          marker_types = settings.EDITIABLE_MARKER_TYPES,
+                                                          marker_editing=marker_editing))
 
 
 @login_required
 def route_map(request, route_guid = None):
     route_editing = False
     if route_guid:
-        route = get_object_or_404(Route, guid=route_guid)
+        route = get_object_or_404(Route, pk=route_guid)
         if route.creator == request.user:
             route_editing = True
     else:
-        route = dict(guid=None)
+        route = Route(guid=None, pk=None)
         route_editing = True
-    return render(request, 'srmain/system_map.html', dict(route = route, route_editing=route_editing))
+    return render(request, 'srmain/system_map.html', dict(  marker_info = simplejson.dumps(settings.MARKER_INFO),
+                                                            route = route,
+                                                            route_editing=route_editing))
 
 @login_required
 def ping_show(request):

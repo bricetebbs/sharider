@@ -5,7 +5,7 @@
 
 
 <script type="text/javascript" src="{{ STATIC_URL }}js/raphael-min.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}js/map_funcs.js?3"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/map_funcs.js?5"></script>
 <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"> </script>
 
 <script type="text/javascript">
@@ -15,8 +15,10 @@ var pointsData;
 var posMarker;
 var map;
 var allMarkers = new Array;
-var markerInfoTable;
+var currentMarker = null;
+var markerInfoTable = {% if marker_info %} {{ marker_info|safe}} {% else %} null {% endif %};
 var directionsService = new google.maps.DirectionsService();
+var markerIconPath = '{{ STATIC_URL }}img/';
 
 var latestDirections;
 var chart;
@@ -30,6 +32,8 @@ var chartY = 100;
 
 var currentRouteGuid = {% if route %} '{{ route.pk}}' {% else %}null {% endif %};
 var currentRideGuid = {% if ride %} '{{ ride.pk}}' {% else %}null {% endif %};
+
+var currentMarkerId = {% if marker %} '{{ marker.pk}}' {% else %}null {% endif %};
 
 var routeEditing = {% if route_editing %} true {% else %} false {% endif  %};
 
@@ -185,13 +189,20 @@ function initialize()
 
     if(routeEditing)
         google.maps.event.addListener(map, 'click', addWayPoint);
-    
+
     $.ajax({ url: '{% url all_markers %}', dataType: 'json', context: document.body,
         success: function(data)
         {
-            loadMarkers(map, data,'{{ STATIC_URL }}img/');
-            setupMarkerOptions(data,'#map_options', makeMarkerVisibilityCallback);
-              $("#map_options").buttonset();
+            markerInfoTable = data.info_table;
+            loadMarkers(map, data);
+            setupMarkerOptions('#map_options', makeMarkerVisibilityCallback);
+            $("#map_options").buttonset();
+            {% if marker %}
+            if(currentMarkerId)
+            {
+                loadMarker(currentMarkerId, {{ marker.kind }});
+            }
+            {%  endif %}
         }
     });
     
@@ -210,6 +221,7 @@ function initialize()
         loadRide(currentRideGuid,'{{ STATIC_URL}}img/');
         $('#ride_detail').show();
     }
+
 
     // If the screen resizes we may need to deal with it
     $(window).resize(function() {         
@@ -230,7 +242,21 @@ $().ready(initialize());
             <button onclick='saveCurrentRoute();'> Save Route</button>
             Name: <input id="route_name"type="text" name="lname" />
     </div>
+    <div id="marker_edit_controls" {%if not marker_editing %} style='display: none;'{% endif %}>
+            <button onclick='saveMarker();'>Save Spot</button>
 
+            Name: <input id="marker_name"type="text" name="mname" />
+            Type:
+            <select id='marker_kind' onchange='markerTypeChanged();'>
+                {%  for kind, name in marker_types %}
+                    <option {% ifequal kind marker.kind %} selected='selected' {%  endifequal %} value='{{kind}}'>{{ name }}</option>
+                {%  endfor %}
+            </select>
+            <button onclick='markerToViewCenter();'>Center</button>
+            <div>
+            More Info: <input size='80' id="marker_link"type="text" name="mlink" />
+            </div>
+    </div>
 <div id='ride_detail' {% if not ride %}style='display: none;' {% endif %}>
     <div id='ride_info'>
         <strong>Start:</strong>{{ride.start_time}}<br/>
