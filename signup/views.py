@@ -33,18 +33,17 @@ class SignupEmailForm(forms.Form):
 
 def send_email_auth_token(request, user, new_user=False):
     token_generator = PasswordResetTokenGenerator()
-    site_name = get_current_site(request)
+  
     t = loader.get_template('signup/email_auth_form.html')
     c = {
             'email': user.email,
-            'site_name': site_name,
+            'host':  request.get_host(),
             'uid': int_to_base36(user.id),
             'user': user,
             'token': token_generator.make_token(user),
             'new_user' : new_user,
         }
-    send_mail(_("New Login token for %s") % site_name, t.render(Context(c)), 'blue@northnitch.com',
-                  [user.email])
+    send_mail(_("New Login token for %s") % request.get_host(), t.render(Context(c)), settings.EMAIL_HOST_USER, [user.email])
 
 def signup_email(request):
     email_form = SignupEmailForm(request.POST)

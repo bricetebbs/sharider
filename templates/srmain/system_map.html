@@ -30,7 +30,7 @@ var distanceMin = 0;
 var chartX = 500;
 var chartY = 100;
 
-var currentRouteGuid = {% if route %} '{{ route.pk}}' {% else %}null {% endif %};
+var currentRouteGuid = {% if route.guid  %} '{{ route.pk}}' {% else %}null {% endif %};
 var currentRideGuid = {% if ride %} '{{ ride.pk}}' {% else %}null {% endif %};
 
 var currentMarkerId = {% if marker %} '{{ marker.pk}}' {% else %}null {% endif %};
