@@ -26,6 +26,15 @@ urlpatterns = patterns('',
         view =  'signup.views.signup_login_by_email',
         name = 'signup_login_by_email'
         ),
-
+      url (
+        regex = '^change_username/$',
+        view =  'signup.views.signup_change_username_and_password',
+        name = 'signup_change_username_and_password'
+        ),
+   url (
+        regex = '^change_password/$',
+        view =  'signup.views.signup_change_password',
+        name = 'signup_change_password'
+        ),
 
     )

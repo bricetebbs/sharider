@@ -306,7 +306,6 @@ header h1 h2 h3 h4 h5 {
 header h1 {
   font-size: 40px;
   letter-spacing: -2px;
-  text-transform: uppercase;
   margin-bottom: 10px;
   padding-bottom: 10px;
   font-weight: bold; }
@@ -363,7 +362,7 @@ h4 {
   border-bottom: 1px solid #d19405; }
 
 #info_banner span {
-  width: 60px;
+  width: 200px;
   display: inline-block; }
 
 nav {

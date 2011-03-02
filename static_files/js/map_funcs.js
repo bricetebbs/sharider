@@ -1,8 +1,19 @@
 
 function showInfoWindow(marker)
 {
+
+    content = '<img src="'+ marker.icon+ '"/><strong>' + marker.my_name  + '</strong><br />';
+    if (marker.my_link.substr(0,4) == 'http')
+    {
+        content += '<a href="' + marker.my_link + '">View Webpage</a><br />';
+    }
+    else
+    {
+        content += marker.my_link + '<br />'
+    }
+    content += marker.my_hover;
     var infowindow = new google.maps.InfoWindow({  
-                  content: '<img src="'+ marker.icon+ '"><strong>' + marker.my_name  + '</strong><br/><a href="' + marker.my_link + '">View Webpage</a><br/>' + marker.my_hover
+                  content: content
          });  
     infowindow.open(map, marker); 
 }

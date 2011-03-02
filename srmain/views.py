@@ -17,7 +17,6 @@ from django.views.generic.list_detail import object_list
 from srmain.models import Ride, Segment, Marker, RiderProfile, Route, WayPoint
 from django.shortcuts import get_object_or_404, render, redirect
 
-from django.views.generic import ListView
 
 from django.contrib.auth.models import User
 

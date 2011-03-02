@@ -1,13 +1,10 @@
-Add Marker Add UI
-Add Username/password setup
 
+
+Why does missing file generate a 500
 
 
 
 route search enter to points show routes which take you from a to b
-Why does missing file generate a 500
-Add button in spot edit to move marker to center of view
-Fix Marker options to show the ones we care about
 
 
 
@@ -19,7 +16,7 @@ Store GUID with Recording on iphone when its generated.
 5min rt updates so no one needs to call and say when will you get here.
 Make login test actuall test login
 
-Cleeanup memorry usage
+Cleeanup memory usage
 Make requester smarter. Knows about auth and you just queue things up with a call back for it to ask you for more. 1 requester. retrys if auth fails. Also encapuslate server:port info in class
 
 ##

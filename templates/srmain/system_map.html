@@ -5,7 +5,7 @@
 
 
 <script type="text/javascript" src="{{ STATIC_URL }}js/raphael-min.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}js/map_funcs.js?5"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/map_funcs.js?6"></script>
 <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"> </script>
 
 <script type="text/javascript">
@@ -252,7 +252,7 @@ $().ready(initialize());
                     <option {% ifequal kind marker.kind %} selected='selected' {%  endifequal %} value='{{kind}}'>{{ name }}</option>
                 {%  endfor %}
             </select>
-            <button onclick='markerToViewCenter();'>Center</button>
+            <button onclick='markerToViewCenter();'>Move Spot to Center</button>
             <div>
             More Info: <input size='80' id="marker_link"type="text" name="mlink" />
             </div>

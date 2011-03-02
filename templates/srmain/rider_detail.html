@@ -5,6 +5,13 @@
 {% block content %}
 <h3>{{ rider.username }}</h3>
 
+{% ifequal rider.username rider.email %}
+You have not set a username and password yet for this account. You can do this by clicking the button.
+<button onClick="window.location='{%  url signup_change_username_and_password  %}'">Set Username and Password.</button>
+{% else %}
+<button onClick="window.location='{%  url signup_change_password  %}'">Change Password</button>
+{% endifequal %}
+ 
 <h3>Recent Rides</h3>
 <table id='ride_table' class='table_list'>
     <thead>

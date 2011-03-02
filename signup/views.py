@@ -15,16 +15,20 @@ from django.contrib.auth import login as login_user
 
 from django.contrib.auth.views import login as login_view
 from django.contrib.auth.views import logout as logout_view
+from django.contrib.auth.views import password_change as password_change_view
 
+from django.contrib.auth.forms import UserCreationForm
 from django.conf import settings
 
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.utils.translation import ugettext as _
 
+from django.contrib.auth.decorators import login_required
+
 
 
 class SignupEmailForm(forms.Form):
-    email_address = forms.EmailField()
+    email_address = forms.EmailField(widget=forms.TextInput(attrs={'size':'45'}))
 
 
 def send_email_auth_token(request, user, new_user=False):
@@ -48,14 +52,20 @@ def signup_email(request):
         email = email_form.cleaned_data['email_address']
         email = email.strip().lower()
         user = User.objects.filter(email=email)
+        new_user = True
         if user:
             # we had this guy before reset his password
             send_email_auth_token(request, user[0], new_user=False)
+            new_user = False
         else:
             user =  User.objects.create_user(email, email, '')
             send_email_auth_token(request, user, new_user=True)
 
-    return HttpResponse('Check your email %s for a login token.' % email)
+        return render(request, 'signup/email_sent.html', dict(email=email, new_user=new_user))
+    else:
+         return login_view(request, template_name='signup/login_main.html',
+                    extra_context=dict(email_form=email_form))
+
 
 #
 #  We can override the templates in here
@@ -79,4 +89,42 @@ def signup_login_by_email(request, user_id, token):
         login_user(request, user)
 
         return redirect(settings.LOGIN_REDIRECT_URL)
-    return HttpResponse('Bad Link')
+    return HttpResponse('Your login link has expired or is invalid. Please select a new one.')
+
+class UserUpdateForm(UserCreationForm):
+
+    class Meta:
+        model = User
+        fields = ("username",)
+
+    def __init__(self, *args, **kwargs):
+        super(UserUpdateForm, self).__init__(*args, **kwargs)
+
+        for field in self.fields:
+            self.fields[field].widget.attrs['autocomplete']='off'
+
+    def clean_username(self):
+
+        if self.instance.username != self.instance.email: # then we have set if before
+            raise forms.ValidationError(_("We have already set the username for this user before."))
+
+        return super(UserUpdateForm, self).clean_username()
+
+@login_required
+def signup_change_username_and_password(request):
+    if request.method=='GET':
+        user_form = UserUpdateForm(instance=request.user)
+    else:
+        user_form = UserUpdateForm(request.POST,instance=request.user)
+        if user_form.is_valid():
+            user_form.save()
+            return redirect(settings.LOGIN_REDIRECT_URL)
+
+
+    return render(request, 'signup/change_username_and_password.html', dict(user_form=user_form))
+
+@login_required
+def signup_change_password(request):
+    return password_change_view(request, template_name='signup/change_password.html',
+                                post_change_redirect=settings.LOGIN_REDIRECT_URL)
+

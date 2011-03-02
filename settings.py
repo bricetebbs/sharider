@@ -183,9 +183,9 @@ INSTALLED_APPS = (
 )
 
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'blue@northnitch.com'
-EMAIL_HOST_PASSWORD ='bluepass'
-EMAIL_SUBJECT_PREFIX = '[Sharider]'
+EMAIL_HOST_USER = 'user@example.com'
+EMAIL_HOST_PASSWORD ='password'
+EMAIL_SUBJECT_PREFIX = '[SpokeTransit.com]'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 SERVER_EMAIL = DEFAULT_FROM_EMAIL = EMAIL_HOST_USER

@@ -7,7 +7,7 @@
     <table id='spot_table' class='table_list'>
         <thead>
         <tr>
-            <th style='display: none'>Link</th><th>Name</th><th>Type</th><th>Web Link</th>
+            <th style='display: none'>Link</th><th>Name</th><th>Type</th><th>Info</th>
         </tr>
         </thead>
         {% for marker in object_list %}
@@ -15,7 +15,7 @@
                 <td> {% url marker_map marker.id %}</td>
                 <td>{{ marker.name }}</td>
                 <td>{{ marker.get_kind_display }}</td>
-                <td><a href="{{ marker.link }}">{{ marker.link }}</a></td>
+                <td>{{ marker.link }}</td>
             </tr>
         {% endfor %}
     </table>
