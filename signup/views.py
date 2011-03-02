@@ -103,6 +103,9 @@ class UserUpdateForm(UserCreationForm):
             self.fields[field].widget.attrs['autocomplete']='off'
 
     def clean_username(self):
+        if self.cleaned_data["username"] == self.instance.email:
+
+            raise forms.ValidationError(_("Choose something other than your email address for the username"))
 
         if self.instance.username != self.instance.email: # then we have set if before
             raise forms.ValidationError(_("We have already set the username for this user before."))
