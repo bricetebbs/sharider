@@ -242,7 +242,6 @@ function chartPick(ex, ey, id)
 function mouseMoved(event) 
 {
     chartPick(event.pageX, event.pageY,'chart_canvas');
-    console.log("Moved");
 }
 
 function touchUpdate(event)

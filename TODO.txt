@@ -34,7 +34,6 @@ Save of GUID must stat in recording detail view controller
 
 function setupRouteList()
 {
-    console.log("Setup route list");
     $.ajax({ url: '{% url json_route_list %}', dataType: 'json', context: document.body,
         success: function(data)
         {
@@ -45,7 +44,6 @@ function setupRouteList()
             {
                 var r = data.route_list[i];
                 var lbl = '<a onclick="loadRoute(\'' + r.guid + '\');">' + r.creator + ': ' + r.name + '</a><br/>';
-                console.log(lbl);
                 $('#anno_tab_routes').append(lbl);
              }
             $("a", "#anno_tab_routes").button();
@@ -58,7 +56,6 @@ function setupRouteList()
 
 function setupRideList()
 {
-    console.log("Setup Ride list");
     $.ajax({ url: '{% url json_ride_list %}', dataType: 'json', context: document.body,
         success: function(data)
         {
