@@ -5,7 +5,7 @@
 {% block content %}
 <h2>Personal Page for {{ rider.username }}</h2>
 
-{% ifequal user rider.user %}
+{% ifequal user rider %}
 {% ifequal rider.username rider.email %}
 You have not set a username and password yet for this account. You can do this by clicking the button.
 <button onClick="window.location='{%  url signup_change_username_and_password  %}'">Set Username and Password.</button>
