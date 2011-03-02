@@ -11,8 +11,8 @@
     </thead>
     {% for ride in object_list %}
         <tr><td style='display: none;'>{% url ride_map ride.pk %}</td>
-            <td>{{ ride.rider.username }}a</td>
-            <td>{{ ride.name }}d</td>
+            <td>{{ ride.rider.username }}</td>
+            <td>{{ ride.name }}</td>
             <td>{{ ride.start_time }}</td>
             <td>{{ ride.end_time }}</td>
             <td>{{ ride.html_distance }}</td>

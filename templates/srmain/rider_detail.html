@@ -5,15 +5,17 @@
 {% block content %}
 <h2>Personal Page for {{ rider.username }}</h2>
 
+{% ifequal user rider.user %}
 {% ifequal rider.username rider.email %}
 You have not set a username and password yet for this account. You can do this by clicking the button.
 <button onClick="window.location='{%  url signup_change_username_and_password  %}'">Set Username and Password.</button>
 {% else %}
 <button onClick="window.location='{%  url signup_change_password  %}'">Change Password</button>
 {% endifequal %}
+{% endifequal %}
 
 <br/><br/>
-<h3>My Recent Rides</h3>
+<h3>Recent Rides</h3>
 <table id='ride_table' class='table_list'>
     <thead>
         <tr>
@@ -22,8 +24,8 @@ You have not set a username and password yet for this account. You can do this b
     </thead>
     {% for ride in rider.ride_set.all %}
         <tr><td style='display: none;'>{% url ride_map ride.pk %}</td>
-            <td>{{ ride.rider.username }}a</td>
-            <td>{{ ride.name }}d</td>
+            <td>{{ ride.rider.username }}</td>
+            <td>{{ ride.name }}</td>
             <td>{{ ride.start_time }}</td>
             <td>{{ ride.end_time }}</td>
             <td>{{ ride.html_distance }}</td>
@@ -31,7 +33,7 @@ You have not set a username and password yet for this account. You can do this b
     {% endfor %}
 </table>
 
-<h3>My  Routes </h3>
+<h3>Routes </h3>
 <table id='route_table' class='table_list'>
     <thead>
         <tr>

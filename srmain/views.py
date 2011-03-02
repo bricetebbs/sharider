@@ -51,7 +51,6 @@ def save_marker(request):
 
     json_data = simplejson.loads(request.raw_post_data)
 
-    print json_data
     if json_data['pk']:
         marker = Marker.objects.get(pk=int(json_data['pk']))
     else:

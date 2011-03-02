@@ -7,6 +7,10 @@ function showInfoWindow(marker)
     {
         content += '<a href="' + marker.my_link + '">View Webpage</a><br />';
     }
+    else if (marker.my_link.substr(0,4) == '$in$')
+    {
+        content += '<a href="' + marker.my_link.substring(4, marker.my_link.length-1) + '">See Rider Page</a><br />';
+    }
     else
     {
         content += marker.my_link + '<br />'

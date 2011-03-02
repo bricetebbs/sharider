@@ -29,7 +29,7 @@ class RiderProfile(models.Model):
                     kind = settings.MARKER_TYPE_RIDER,
                     pk = -1,
                     name = self.user.username, 
-                    link = reverse('rider_detail', args=[self.user.id]),
+                    link = '$in$' + reverse('rider_detail', args=[self.user.id]),
                     icon = settings.MARKER_INFO[settings.MARKER_TYPE_RIDER]['icon'],
                     hover = 'Time %s Speed %f' % (str(self.recent_time), self.recent_speed))
     
@@ -39,8 +39,8 @@ class Ride(models.Model):
     guid = models.CharField(max_length=40, primary_key=True)
     name = models.CharField(max_length=200)
     rider = models.ForeignKey(User)
-    start_time = models.DateTimeField(blank = True)
-    end_time = models.DateTimeField(blank = True)
+    start_time = models.DateTimeField(blank = True, null=True)
+    end_time = models.DateTimeField(blank = True, null=True)
     distance = models.FloatField(default = 0.0)
     
     def min_latitude(self):
@@ -102,18 +102,18 @@ class Segment(models.Model):
     
     distance = models.FloatField(default = 0.0)
     
-    start_time = models.DateTimeField(blank = True)
-    end_time = models.DateTimeField(blank = True)
+    start_time = models.DateTimeField(blank = True, null=True)
+    end_time = models.DateTimeField(blank = True ,null=True)
     
-    min_latitude = models.FloatField(blank = True)
-    max_latitude = models.FloatField(blank = True)
-    min_longitude= models.FloatField(blank = True)
-    max_longitude = models.FloatField(blank = True)
+    min_latitude = models.FloatField(blank = True, null=True)
+    max_latitude = models.FloatField(blank = True, null=True)
+    min_longitude= models.FloatField(blank = True, null=True)
+    max_longitude = models.FloatField(blank = True, null=True)
     
-    min_altitude = models.FloatField(blank=True)
-    max_altitude = models.FloatField(blank=True)
+    min_altitude = models.FloatField(blank=True, null=True)
+    max_altitude = models.FloatField(blank=True, null=True)
     
-    max_speed = models.FloatField(blank=True)
+    max_speed = models.FloatField(blank=True, null=True)
     
     def center_latitude(self):
         return (self.min_latitude+self.max_latitude)/2.0
