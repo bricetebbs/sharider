@@ -100,7 +100,6 @@ function  loadMarker(currentMarkerId, newKind)
         }
     }
     // No marker found make one
-     var latlng = new google.maps.LatLng(m.latitude, m.longitude);
         name = 'New Spot'
         marker = new google.maps.Marker({ title: name,
                     position: map.getCenter(),
