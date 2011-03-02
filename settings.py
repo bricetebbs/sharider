@@ -18,6 +18,7 @@ MARKER_TYPE_GHOST_BIKE = 3
 MARKER_TYPE_BIKE_RACK = 4
 MARKER_TYPE_CAUTION = 5
 MARKER_TYPE_HOME = 6
+MARKER_TYPE_MEETUP_SPOT=7
 
 # Bike Rack, Scary Spot, Ghost Bike
 MARKER_TYPES = ( (MARKER_TYPE_ERROR,"Error"),
@@ -26,12 +27,14 @@ MARKER_TYPES = ( (MARKER_TYPE_ERROR,"Error"),
                  (MARKER_TYPE_GHOST_BIKE, "Ghost Bike"),
                  (MARKER_TYPE_BIKE_RACK, "Bike Rack"),
                  (MARKER_TYPE_CAUTION, "Danger Spot"),
-                 (MARKER_TYPE_HOME, "Home")
+                 (MARKER_TYPE_HOME, "Home"),
+                 (MARKER_TYPE_MEETUP_SPOT, "Meetup Spot"),
                  )
 
 EDITIABLE_MARKER_TYPES =  (
                  (MARKER_TYPE_BIKE_RACK, "Bike Rack"),
                  (MARKER_TYPE_BIKESHOP, "Bike Shop"),
+                 (MARKER_TYPE_MEETUP_SPOT, "Meetup Spot"),
                  (MARKER_TYPE_CAUTION, "Danger Spot"),
                  (MARKER_TYPE_GHOST_BIKE, "Ghost Bike"),
                  )
@@ -48,8 +51,8 @@ MARKER_INFO = {
     MARKER_TYPE_RIDER : dict(icon='marker_rider.png', option_tag = 'riders', option_name ='Riders', show = True, enabled = True),
     MARKER_TYPE_BIKESHOP : dict(icon='marker_bikestore.png',  option_tag ='bikeshops', option_name ='Bike Shops', show = True, enabled =True),
     MARKER_TYPE_GHOST_BIKE : dict(icon='marker_ghostbike.png', option_tag = 'ghostbikes' ,option_name ='Ghost Bikes', show = True, enabled = True),
-    
-    # Need icons for these
+    MARKER_TYPE_MEETUP_SPOT : dict(icon='marker_meetup.png', option_tag = 'meetups' ,option_name ='Meetup Spots', show = True, enabled = True),
+
     MARKER_TYPE_BIKE_RACK : dict(icon='marker_bikerack.png', option_tag = 'bikeracks', option_name ='Bike Racks', show = True, enabled = True),
     MARKER_TYPE_CAUTION: dict(icon='marker_caution.png', option_tag= 'cautionspots', option_name ='Caution Spots', show = True, enabled = True),
     MARKER_TYPE_HOME: dict(icon='marker_unknown.png', option_tag= 'home', option_name ='Home', show = True, enabled = False)
