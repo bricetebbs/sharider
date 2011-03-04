@@ -348,7 +348,7 @@ def json_ride(request, ride_guid, headers):
                  bounds = dict(min_latitude = ride.min_latitude(), min_longitude = ride.min_longitude(),
                               max_latitude = ride.max_latitude(), max_longitude = ride.max_longitude())
                 )
-    for segment in ride.segment_set.all():
+    for segment in ride.segment_set.all().order_by('start_time'):
         segheadarr = segment.headers.split(',')
         indicies = [segheadarr.index(x) for x in headarr]
 
