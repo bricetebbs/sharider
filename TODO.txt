@@ -1,5 +1,4 @@
 Password button
-
 Why does missing file generate a 500
 
 Signup should tell you more about not using your email address as username
