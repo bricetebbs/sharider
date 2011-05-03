@@ -9,7 +9,7 @@ from django.template import loader, Context
 
 from django.contrib.sites.models import get_current_site
 
-from django.utils.http import int_to_base36
+from django.utils.http import int_to_base36, base36_to_int
 
 from django.contrib.auth import login as login_user
 
@@ -80,6 +80,7 @@ def signup_logout(request):
     return logout_view(request, template_name='signup/logged_out.html')
 
 def signup_login_by_email(request, user_id, token):
+    user_id = base36_to_int(user_id)
     user = get_object_or_404(User,pk=user_id)
     token_generator = PasswordResetTokenGenerator()
 

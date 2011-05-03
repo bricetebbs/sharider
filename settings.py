@@ -134,7 +134,7 @@ SECRET_KEY = 'njw2y^+3@zp4cjya8%3l@yncfck506!h*y-syassh=t&a_1*jc'
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
-    'django.template.loaders.app_directories.load_template_source',
+    'django.template.loaders.app_directories.Loader',
 #     'django.template.loaders.eggs.load_template_source',
 )
 
