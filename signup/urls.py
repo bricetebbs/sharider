@@ -22,7 +22,7 @@ urlpatterns = patterns('',
         name = 'signup_login'
         ),
       url (
-        regex = '^login/email/(?P<user_id>[-\w]+)/(?P<token>[-\w]+)/$',
+        regex = '^login/email/(?P<user_token>[-\w]+)/(?P<key_token>[-\w]+)/$',
         view =  'signup.views.signup_login_by_email',
         name = 'signup_login_by_email'
         ),

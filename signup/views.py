@@ -24,6 +24,8 @@ from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.utils.translation import ugettext as _
 
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.backends import ModelBackend
+from django.contrib.auth import authenticate
 
 
 
@@ -38,9 +40,9 @@ def send_email_auth_token(request, user, new_user=False):
     c = {
             'email': user.email,
             'host':  request.get_host(),
-            'uid': int_to_base36(user.id),
+            'user_token': int_to_base36(user.id),
             'user': user,
-            'token': token_generator.make_token(user),
+            'key_token': token_generator.make_token(user),
             'new_user' : new_user,
         }
     send_mail(_("New Login token for %s") % request.get_host(), t.render(Context(c)), settings.EMAIL_HOST_USER, [user.email])
@@ -79,13 +81,20 @@ def signup_login(request):
 def signup_logout(request):
     return logout_view(request, template_name='signup/logged_out.html')
 
-def signup_login_by_email(request, user_id, token):
-    user_id = base36_to_int(user_id)
-    user = get_object_or_404(User,pk=user_id)
-    token_generator = PasswordResetTokenGenerator()
+class SignupBackEnd(ModelBackend):
+  def authenticate(self, user_token, key_token):
+        try:
+            token_generator=PasswordResetTokenGenerator()
+            user = get_object_or_404(User, pk=base36_to_int(user_token))
+            if token_generator.check_token( user, key_token) and user.is_active:
+                return user
+        except User.DoesNotExist:
+            return None
 
-    if token_generator.check_token( user, token):
-        user.backend='django.contrib.auth.backends.ModelBackend'
+def signup_login_by_email(request, user_token, key_token):
+
+    user = authenticate(user_token = user_token, key_token=key_token)
+    if user:
         login_user(request, user)
 
         return redirect(settings.LOGIN_REDIRECT_URL)

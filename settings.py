@@ -154,6 +154,8 @@ ROOT_URLCONF = 'sharider.urls'
 
 AUTH_PROFILE_MODULE = 'srmain.RiderProfile'
 
+AUTHENTICATION_BACKENDS  = ('signup.views.SignupBackEnd',)
+
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
