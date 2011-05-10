@@ -1,4 +1,3 @@
-# Create your views here.
 
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
@@ -6,8 +5,6 @@ from django import forms
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
 from django.template import loader, Context
-
-from django.contrib.sites.models import get_current_site
 
 from django.utils.http import int_to_base36, base36_to_int
 
@@ -27,6 +24,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.backends import ModelBackend
 from django.contrib.auth import authenticate
 
+import logging
+
+logger = logging.getLogger('signup')
 
 
 class SignupEmailForm(forms.Form):
@@ -52,14 +52,22 @@ def signup_email(request):
     if email_form.is_valid():
         email = email_form.cleaned_data['email_address']
         email = email.strip().lower()
-        user = User.objects.filter(email=email)
+        user = None
+        try:
+            user =  User.objects.get(email=email)
+        except User.DoesNotExist:
+            user = None
+            
         new_user = True
         if user:
             # we had this guy before reset his password
-            send_email_auth_token(request, user[0], new_user=False)
+            send_email_auth_token(request, user, new_user=False)
+            logger.debug("User: %s getting new key." % user.username)
             new_user = False
         else:
             user =  User.objects.create_user(email, email, '')
+
+            logger.debug("User: %s created sending email." % user.username)
             send_email_auth_token(request, user, new_user=True)
 
         return render(request, 'signup/email_sent.html', dict(email=email, new_user=new_user))
@@ -68,9 +76,6 @@ def signup_email(request):
                     extra_context=dict(email_form=email_form))
 
 
-#
-#  We can override the templates in here
-#
 def signup_login(request):
     if request.user.is_authenticated():
         return redirect(settings.LOGIN_REDIRECT_URL)
@@ -87,6 +92,7 @@ class SignupBackEnd(ModelBackend):
             token_generator=PasswordResetTokenGenerator()
             user = get_object_or_404(User, pk=base36_to_int(user_token))
             if token_generator.check_token( user, key_token) and user.is_active:
+                logger.debug("User: %s authenticated via token" % user.username)
                 return user
         except User.DoesNotExist:
             return None

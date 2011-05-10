@@ -195,6 +195,7 @@ EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 SERVER_EMAIL = DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
+MY_LOG_FILENAME = INSTALL_DIR + 'logs/sharider.log'
 
 LOGGING = {
     'version': 1,
@@ -220,8 +221,18 @@ LOGGING = {
         'mail_admins': {
             'level': 'ERROR',
             'class': 'django.utils.log.AdminEmailHandler',
+        },
 
-        }
+        'rotating_file':
+        {
+            'level' : 'DEBUG',
+            'formatter': 'verbose',
+            'class' : 'logging.handlers.TimedRotatingFileHandler',
+            'filename' :  MY_LOG_FILENAME,
+            'when' : 'midnight',
+            'interval' : 1,
+            'backupCount' : 7,
+        },
     },
     'loggers': {
         'django': {
@@ -235,8 +246,12 @@ LOGGING = {
             'propagate': False,
         },
         'sharider': {
-            'handlers': ['console', 'mail_admins'],
-            'level': 'INFO',
+            'handlers': ['rotating_file'],
+            'level': 'DEBUG',
+        },
+         'signup': {
+            'handlers': ['rotating_file'],
+            'level': 'DEBUG',
         }
     }
 }

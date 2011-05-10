@@ -478,6 +478,17 @@ nav ul li a:hover {
   width: 300px;
   text-align: left; }
 
+.errorlist li {
+  list-style-type: none;
+  background: pink;
+  color: red;
+  font-weight: bold;
+  text-align: center;
+  border: 1px solid red;
+  padding: 5px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px; }
+
 .question {
   font-style: italic;
   font-size: 110%;
