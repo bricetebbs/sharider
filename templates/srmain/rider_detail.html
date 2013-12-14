@@ -8,9 +8,9 @@
 {% ifequal user rider %}
 {% ifequal rider.username rider.email %}
 You have not set a username and password yet for this account. You can do this by clicking the button.
-<button onClick="window.location='{%  url signup_change_username_and_password  %}'">Set Username and Password.</button>
+<button onClick="window.location='{%  url 'signup_change_username_and_password'  %}'">Set Username and Password.</button>
 {% else %}
-<button onClick="window.location='{%  url signup_change_password  %}'">Change Password</button>
+<button onClick="window.location='{%  url 'signup_change_password'  %}'">Change Password</button>
 {% endifequal %}
 {% endifequal %}
 
@@ -23,7 +23,7 @@ You have not set a username and password yet for this account. You can do this b
         </tr>
     </thead>
     {% for ride in rider.ride_set.all %}
-        <tr><td style='display: none;'>{% url ride_map ride.pk %}</td>
+        <tr><td style='display: none;'>{% url 'ride_map' ride.pk %}</td>
             <td>{{ ride.rider.username }}</td>
             <td>{{ ride.name }}</td>
             <td>{{ ride.start_time }}</td>
@@ -41,7 +41,7 @@ You have not set a username and password yet for this account. You can do this b
         </tr>
     </thead>
     {% for route in rider.route_set.all %}
-        <tr><td style='display:none;'>{% url route_map route.pk %}</td>
+        <tr><td style='display:none;'>{% url 'route_map' route.pk %}</td>
             <td>{{ route.creator.username }}</td>
             <td>{{ route.name }}</td>
         </tr>

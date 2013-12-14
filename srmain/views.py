@@ -11,7 +11,7 @@ from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 
 from django.contrib.auth import authenticate, login
-from django.views.generic.list_detail import object_list
+from django.views.generic.list import ListView
 
 
 from srmain.models import Ride, Segment, Marker, RiderProfile, Route, WayPoint
@@ -35,15 +35,15 @@ def rider_detail(request, rider_id = None):
 @login_required
 def route_list(request):
     queryset = Route.objects.all()
-    return object_list(request, queryset=queryset)
+    return ListView.as_view( queryset=queryset)(request)
 @login_required
 def ride_list(request):
     queryset = Ride.objects.all()
-    return object_list(request, queryset=queryset)
+    return ListView.as_view( queryset=queryset)(request)
 @login_required
 def marker_list(request):
     queryset = Marker.objects.all()
-    return object_list(request, queryset=queryset)
+    return ListView.as_view(queryset=queryset)(request)
 
 
 @login_required

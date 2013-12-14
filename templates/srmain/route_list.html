@@ -4,7 +4,7 @@
 {% block content %}
 
 <h2>Routes</h2>
-<button onClick="window.location='{%  url route_map  %}'">Add A Route...</button>
+<button onClick="window.location='{%  url 'route_map'  %}'">Add A Route...</button>
 <table id='route_table' class='table_list'>
     <thead>
         <tr>
@@ -12,7 +12,7 @@
         </tr>
     </thead>
     {% for route in object_list %}
-        <tr><td style='display:none;'>{% url route_map route.pk %}</td>
+        <tr><td style='display:none;'>{% url 'route_map'     route.pk %}</td>
             <td>{{ route.creator.username }}</td>
             <td>{{ route.name }}</td>
         </tr>

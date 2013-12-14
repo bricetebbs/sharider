@@ -61,15 +61,15 @@
     <nav>
     <ul>
            {%  block sub_menu  %}
-           <li><a href="{%  url system_map %}">Map</a></li>
+           <li><a href="{%  url 'system_map' %}">Map</a></li>
 
-           <li><a href="{%  url ride_list %}">Rides</a></li>
+           <li><a href="{%  url 'ride_list' %}">Rides</a></li>
 
-           <li><a href="{%  url route_list %}">Routes</a></li>
-           <li><a href="{%  url marker_list %}">Spots</a></li>
-           <li><a href="{%  url rider_detail %}">My Page</a></li>
+           <li><a href="{%  url 'route_list' %}">Routes</a></li>
+           <li><a href="{%  url 'marker_list' %}">Spots</a></li>
+           <li><a href="{%  url 'rider_detail' %}">My Page</a></li>
            {%  endblock %}
-           <li><a href="{%  url signup_logout %}">Logout</a></li>
+           <li><a href="{%  url 'signup_logout' %}">Logout</a></li>
     </ul>
     </nav>
     {% endblock %}

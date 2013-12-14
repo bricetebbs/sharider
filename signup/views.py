@@ -87,7 +87,7 @@ def signup_logout(request):
     return logout_view(request, template_name='signup/logged_out.html')
 
 class SignupBackEnd(ModelBackend):
-  def authenticate(self, user_token, key_token):
+    def authenticate(self, user_token, key_token):
         try:
             token_generator=PasswordResetTokenGenerator()
             user = get_object_or_404(User, pk=base36_to_int(user_token))

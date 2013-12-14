@@ -185,7 +185,7 @@ function initialize()
     if(routeEditing)
         google.maps.event.addListener(map, 'click', addWayPoint);
 
-    $.ajax({ url: '{% url all_markers %}', dataType: 'json', context: document.body,
+    $.ajax({ url: '{% url 'all_markers' %}', dataType: 'json', context: document.body,
         success: function(data)
         {
             markerInfoTable = data.info_table;
